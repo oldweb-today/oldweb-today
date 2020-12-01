@@ -1,0 +1,30 @@
+{
+  "name": "oldwebtoday.js",
+  "main": "src/main.js",
+  "sideEffects": [
+    "./src/main.js"
+  ],
+  "version": "1.0.0",
+  "license": "MIT",
+  "dependencies": {
+    "@rollup/plugin-node-resolve": "^10.0.0",
+    "lit-element": "^2.4.0",
+    "sab-ring-buffer": "https://github.com/PaulKinlan/sab-ring-buffer",
+    "spectre.css": "^0.5.9",
+    "web-streams-polyfill": "^3.0.1"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "build-dev": "NODE_ENV=development rollup -c",
+    "start-dev": "NODE_ENV=development SERVE=1 rollup -c"
+  },
+  "devDependencies": {
+    "rollup": "^2.34.0",
+    "rollup-plugin-copy": "^3.3.0",
+    "rollup-plugin-livereload": "^2.0.0",
+    "rollup-plugin-serve": "^1.1.0",
+    "webpack": "^5.9.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
