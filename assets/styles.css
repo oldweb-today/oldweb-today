@@ -1,0 +1,56 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: lightgrey;
+}
+
+.owt-title {
+  font-family: cursive;
+  font-variant-caps: petite-caps;
+  word-break: break-word;
+}
+
+#emu {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+
+.err {
+  margin: 2em;
+}
+
+.flex-form {
+  display: flex;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-label.caption {
+  font-variant-caps: all-small-caps;
+}
+
+.form-label.caption:not(:first-of-type) {
+  margin-top: 1.0rem;
+}
+
+.controls {
+  height: 100%;
+}
+
+oldweb-today {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+
+owt-v86-browser {
+  background-color: black;
+  display: flex;
+  width: 1024px;
+  height: 768px;
+}
+

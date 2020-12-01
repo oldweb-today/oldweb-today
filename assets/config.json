@@ -1,0 +1,72 @@
+[
+  {
+    "id": "nm2-mac",
+    "name": "NCAS Mosaic 2.0.1 (MacOS)",
+    "type": "bas",
+    "opts": {
+      "imagePath": "../images/bas/",
+      "imageUrl": "../images/bas/hd-ie-m.img",
+      "emuBrowserId": "br-nm2"
+    }
+  },
+  {
+    "id": "nm3-mac",
+    "name": "NCAS Mosaic 3.0B4 (MacOS)",
+    "type": "bas",
+    "opts": {
+      "imagePath": "../images/bas/",
+      "imageUrl": "../images/bas/hd-ns.img",
+      "emuBrowserId": "br-nm3"
+    }
+  },
+  {
+    "id": "ml-mac",
+    "name": "MacLynx 2.0 (MacOS)",
+    "type": "bas",
+    "opts": {
+      "imagePath": "../images/bas/",
+      "imageUrl": "../images/bas/hd-ns.img",
+      "emuBrowserId": "br-ml2"
+    }
+  },
+  {
+    "id": "ns3-mac",
+    "name": "Netscape 3.04 (MacOS)",
+    "type": "bas",
+    "opts": {
+      "imagePath": "../images/bas/",
+      "imageUrl": "../images/bas/hd-ns.img",
+      "emuBrowserId": "br-ns3"
+    }
+  },
+  {
+    "id": "ns4-mac",
+    "name": "Netscape 4.07 (MacOS)",
+    "type": "bas",
+    "opts": {
+      "imagePath": "../images/bas/",
+      "imageUrl": "../images/bas/hd-ns.img",
+      "emuBrowserId": "br-ns4"
+    }
+  },
+  {
+    "id": "ie4-mac",
+    "name": "IE 4.01 (MacOS)",
+    "type": "bas",
+    "opts": {
+      "imagePath": "../images/bas/",
+      "imageUrl": "../images/bas/hd-ie-m.img",
+      "emuBrowserId": "br-ie4"
+    }
+  },
+  {
+    "id": "ie6",
+    "name": "Internet Explorer 6 (Win98)",
+    "type": "v86",
+    "opts": {
+      "imagePath": "../images/v86/",
+      "imageUrl": "images/v86/ie6.img",
+      "imageSize": 419430400
+    }
+  }
+]
