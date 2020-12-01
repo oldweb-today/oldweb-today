@@ -17,7 +17,8 @@ class OldWebToday extends LitElement
 
     this.replayUrl = "http://example.com/";
     this.replayTs = "";
-    this.inputTs = "1996";
+    this.inputTs = "";
+    this.launchReplayUrl = "";
     this.browserID = "";
     this.launchID = "";
     this.isLoading = false;
@@ -64,7 +65,7 @@ class OldWebToday extends LitElement
 
   firstUpdated() {
     if (!window.location.hash) {
-      window.location.hash = "#/1996/http://geocities.com/";
+      window.location.hash = "#/19960101/http://geocities.com/";
     }
 
     this.parseOpts();
@@ -74,8 +75,9 @@ class OldWebToday extends LitElement
     // start running only on initial load
     this.launchID = this.browserID;
     this.isLoading = this.isRunning;
+    this.launchReplayUrl = this.replayUrl;
 
-    this.inputTs = this.replayTs || "1996";
+    this.inputTs = this.replayTs || "19960101";
   }
 
   updated(changedProps) {
@@ -137,7 +139,7 @@ class OldWebToday extends LitElement
       return html`<div class="err">Please select a browser from the list.</div>`;
     }
 
-    if (!this.emuMap) {
+    if (!this.emuOptions.length) {
       return html`<div class="err">Loading Browser Config...</div>`;
     }
 
@@ -158,10 +160,10 @@ class OldWebToday extends LitElement
     return html`
       <div class="container">
         <div class="columns">
-          <div class="controls column col-3">
+          <div class="column controls">
             <h1 class="owt-title">OldWeb.Today</h1>
-            <div class="form-group" style="margin-bottom: 1em">
-              <label for="browser" class="form-label caption">Browser:</label>
+            <div class="form-group">
+              <label for="browser" class="form-label space-top">Browser:</label>
 
               <div class="dropdown full-width">
                 <a class="btn dropdown-toggle" tabindex="0">
@@ -177,10 +179,12 @@ class OldWebToday extends LitElement
                 </ul>
               </div>
 
-              <label class="form-label caption" for="url">URL</label>
-              <input class="form-input" type="url" id="url" @input="${(e) => this.replayUrl = e.target.value}" .value="${this.replayUrl}" placeholder="http://example.com/"></input>
-              
-              <label for="dt" class="form-label caption">Archive Date or Live Web:</label>
+              <form @submit="${this.onUrlUpdate}" class="space-top">
+                <label class="form-label" for="url">URL</label>
+                <input class="form-input" type="url" id="url" @input="${(e) => this.replayUrl = e.target.value}" .value="${this.replayUrl}" placeholder="http://example.com/"></input>
+              </form>              
+
+              <label for="dt" class="form-label space-top">Archive Date or Live Web:</label>
               <div class="flex-form">
                 <label class="form-radio" style="padding-right: 0">
                   <input @click="${(e) => this.replayTs = this.inputTs}" type="radio" name="islive" ?checked="${!!this.replayTs}">
@@ -211,7 +215,7 @@ class OldWebToday extends LitElement
               <button style="display: none" @click="${this.onDL}">Save State</button>
             </div>
           </div>
-          <div class="column col-auto">
+          <div class="column">
             ${this.renderEmulator()}
           </div>
         </div>
@@ -225,6 +229,13 @@ class OldWebToday extends LitElement
 
   onSelectBrowser(event, emu) {
     this.browserID = emu.id;
+  }
+
+  onUrlUpdate(event) {
+    event.preventDefault();
+    if (this.isRunning && this.replayUrl !== this.launchReplayUrl) {
+      window.location.reload();
+    }
   }
 
   onChangeTs(event) {

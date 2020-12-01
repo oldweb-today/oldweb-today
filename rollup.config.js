@@ -12,6 +12,7 @@ export default [{
         format: 'iife',
       },
     ],
+    treeshake: false,
     plugins: [
       nodeResolve(),
       copy({

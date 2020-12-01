@@ -14,6 +14,7 @@ html, body {
   width: 100%;
   height: 100%;
   background-color: black;
+  z-index: 100;
 }
 
 .err {
@@ -28,16 +29,21 @@ html, body {
   width: 100%;
 }
 
-.form-label.caption {
+.form-label {
   font-variant-caps: all-small-caps;
 }
 
-.form-label.caption:not(:first-of-type) {
+.space-top {
   margin-top: 1.0rem;
 }
 
 .controls {
   height: 100%;
+}
+
+.controls .form-group {
+  margin-bottom: 1em;
+  width: 250px;
 }
 
 oldweb-today {
