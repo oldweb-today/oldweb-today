@@ -20,6 +20,7 @@ class OldWebToday extends LitElement
     this.inputTs = "1996";
     this.browserID = "";
     this.launchID = "";
+    this.isLoading = false;
 
     this.showUpdateMessage = false;
 
@@ -29,6 +30,7 @@ class OldWebToday extends LitElement
     this.updateChannel = new BroadcastChannel("update-proxy");
     this.updateChannel.onmessage = () => {
       this.showUpdateMessage = false;
+      this.isLoading = false;
     };
 
     this.loadConfig();
@@ -48,7 +50,7 @@ class OldWebToday extends LitElement
       replayUrl: { type: String },
       replayTs: { type: String },
       inputTs: { type: String },
-      isLive: { type: Boolean },
+      isLoading: { type: Boolean },
       launchID: { type: String },
       browserID: { type: String },
       showUpdateMessage: { type: Boolean },
@@ -71,6 +73,7 @@ class OldWebToday extends LitElement
 
     // start running only on initial load
     this.launchID = this.browserID;
+    this.isLoading = this.isRunning;
 
     this.inputTs = this.replayTs || "1996";
   }
@@ -197,8 +200,11 @@ class OldWebToday extends LitElement
                 </div>` : html``}
 
               ${this.isRunning ? html`
-                <div style="margin: 1em 0"><i>Emulated Browser is Running!</i>
-                <button class="btn btn-sm" @click="${this.onCancel}">Stop</button>
+                <div style="margin: 1em 0">
+                  ${!this.isLoading ? html`
+                  <i>Emulated Browser is Running!</i>` : html`
+                  <div class="loading loading-lg"></div><i>Please wait, Emulated Browser is Loading...</i>`}
+                  <button class="btn btn-sm" @click="${this.onCancel}">Stop</button>
                 </div>
                 ` : ``}
 

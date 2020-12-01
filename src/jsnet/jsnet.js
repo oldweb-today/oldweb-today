@@ -47,6 +47,7 @@ function updateState(data) {
     proxyPort = data.proxyPort;
   }
   homePage = `http://${proxyIP}:${proxyPort}/`;
+  pingOnUpdate = true;
 }
 
 self.onmessage = (event) => {
@@ -63,7 +64,6 @@ let pingOnUpdate = false;
 const updateProxy = new BroadcastChannel("update-proxy");
 updateProxy.onmessage = (event) => {
   updateState(event.data);
-  pingOnUpdate = true;
 };
 
 
