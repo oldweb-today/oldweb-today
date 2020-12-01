@@ -64,9 +64,21 @@
     "name": "Internet Explorer 6 (Win98)",
     "type": "v86",
     "opts": {
-      "imagePath": "../images/v86/",
+      "imagePath": "images/v86/",
       "imageUrl": "images/v86/ie6.img",
       "imageSize": 419430400
     }
+  },
+  {
+    "id": "ie6-state",
+    "name": "Internet Explorer 6 State Reload (Win98)",
+    "type": "v86",
+    "opts": {
+      "imagePath": "images/v86/",
+      "imageUrl": "images/v86/ie6.img",
+      "imageSize": 419430400,
+      "stateUrl": "images/v86/state.bin"
+    }
   }
+
 ]

@@ -7,8 +7,6 @@ export default class OWTV86Browser extends LitElement
   constructor() {
     super();
     this.lib86Url = "dist/libv86.js";
-    this.stateUrl = null;
-    this.stateUrl = "images/v86/state.bin";
   }
 
   createRenderRoot() {
@@ -56,15 +54,28 @@ export default class OWTV86Browser extends LitElement
       network_adapter: (bus) => new V86Network(bus, this.url, this.ts)
     };
 
+    let stateLoad = false;
+
+    if (this.opts.stateUrl) {
+      try {
+        const resp = await fetch(this.opts.stateUrl);
+        if (resp.status !== 200) {
+          throw new Error("Invalid state response");
+        }
+        const initial_state = await resp.arrayBuffer();
+        stateLoad = true;
+
+        initOpts.initial_state = initial_state;
+
+        //setTimeout(() => window.emulator.restore_state(initial_state), 100);
+      } catch (e) {
+        console.warn("Couldn't load state", e);
+      }
+    }
+
     window.emulator = new V86Starter(initOpts);
 
-    if (this.stateUrl) {
-      const resp = await fetch(this.stateUrl);
-      const initial_state = await resp.arrayBuffer();
-
-      setTimeout(() => window.emulator.restore_state(initial_state), 100);
-
-    } else {
+    if (!stateLoad) {
       setTimeout(() => {
         console.log("Cancel scandisk keycode sent");
         window.emulator.keyboard_send_scancodes([0x2D]);

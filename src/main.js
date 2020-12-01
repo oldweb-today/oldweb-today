@@ -202,7 +202,7 @@ class OldWebToday extends LitElement
                 </div>
                 ` : ``}
 
-              <button style="display: initial" @click="${this.onDL}">Save State</button>
+              <button style="display: none" @click="${this.onDL}">Save State</button>
             </div>
           </div>
           <div class="column col-auto">
