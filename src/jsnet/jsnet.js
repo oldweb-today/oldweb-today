@@ -29,12 +29,12 @@ let replayTs;
 let proxyIP = "192.168.1.1";
 let proxyPort = 8080;
 let homePage = "http://192.168.1.1:8080/";
+let pollSAB = false;
 
 // for adding ARP entry
 let clientMAC = null;
 let clientIP = null;
-
-const rb = RingBuffer.create(1514 * 128);
+let rb = null;
 let emuPort = null;
 
 let pingOnUpdate = false;
@@ -57,16 +57,21 @@ function updateState(data) {
 }
 
 self.onmessage = (event) => {
-  if (event.data.port) {
-    emuPort = event.data.port;
-    emuPort.postMessage(rb.buffer);
-  }
   if (event.data.clientIP) {
     clientIP = event.data.clientIP;
   }
   if (event.data.clientMAC) {
     clientMAC = event.data.clientMAC;
   }
+  if (event.data.pollSAB) {
+    pollSAB = event.data.pollSAB;
+    rb = RingBuffer.create(1514 * 128);
+    if (event.data.port) {
+      emuPort = event.data.port;
+      emuPort.postMessage(rb.buffer);
+    }
+  }
+
   updateState(event.data);
   main();
 };
@@ -110,7 +115,9 @@ async function main() {
     monitorChannel("eth_to_emu", " <- ");
   }
 
-  broadcastStream("eth_to_emu").readable.pipeTo(sabWriter);
+  if (pollSAB) {
+    broadcastStream("eth_to_emu").readable.pipeTo(sabWriter);
+  }
 
   nic.addIPv4(proxyIP);
 

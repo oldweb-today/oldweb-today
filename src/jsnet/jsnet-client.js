@@ -28,6 +28,8 @@ export default class JSNetClient
       replayUrl = "http://" + replayUrl;
     }
 
+    this.netRecvBuffer = null;
+
     this.netWorker.postMessage({
       port: this.netChannel.port1,
       replayUrl,
@@ -36,18 +38,17 @@ export default class JSNetClient
       proxyPort,
       clientIP,
       clientMAC,
+      pollSAB: !recvCallback,
     }, [this.netChannel.port1]);
 
-    this.netChannel.port2.onmessage = (event) => {
-      console.log("got shared ringbuffer", event.data);
-      this.netrb = RingBuffer.from(event.data);
-    }
-
-    this.netRecvBuffer = null;
-
-    if (recvCallback) {
+    if (!recvCallback) {
+      this.netChannel.port2.onmessage = (event) => {
+        console.log("got shared ringbuffer", event.data);
+        this.netrb = RingBuffer.from(event.data);
+      }
+    } else {
       this.eth_to_emu = new BroadcastChannel("eth_to_emu");
-      this.eth_to_emu.onmessage((event) => recvCallback(event.data));
+      this.eth_to_emu.onmessage = (event) => recvCallback(event.data);
     }
   }
 

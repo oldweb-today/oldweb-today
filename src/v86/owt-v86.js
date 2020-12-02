@@ -107,18 +107,22 @@ class V86Network
     
     this.jsnet = new JSNetClient({
       jsnetUrl: "dist/jsnet.js",
-      replayTs, replayUrl, clientIP, clientMAC});
+      replayTs, replayUrl, clientIP, clientMAC,
+      recvCallback: (data) => this.recv(data)
+    });
     this.bus = bus;
 
     this.bus.register("net0-send", (data) => this.jsnet.send(data), this);
 
-    this.loop = setInterval(() => this.recvLoop(), 10);
+    //this.loop = setInterval(() => this.recvLoop(), 10);
+  }
+
+  recv(data) {
+    this.bus.send("net0-receive", data);
   }
 
   recvLoop() {
-    this.jsnet.pollRecv((data) => {
-      this.bus.send("net0-receive", data);
-    });
+    this.jsnet.pollRecv((data) => this.recv(data));
   }
 
   destroy() {
