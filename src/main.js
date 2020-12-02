@@ -162,12 +162,13 @@ class OldWebToday extends LitElement
         <div class="columns">
           <div class="column controls">
             <h2 class="owt-title">OldWeb.Today</h2>
+            <i class="full-width" style="text-align: center; display: block">JS Browser Emulation</i>
             <div class="form-group">
               <label for="browser" class="form-label space-top">Browser:</label>
 
               <div class="dropdown full-width">
                 <a class="btn dropdown-toggle" tabindex="0">
-                  <span>${this.emuMap[this.browserID] ? this.emuMap[this.browserID].name : 'Select a Browser'}</span>
+                  <span style="font-size: smaller">${this.emuMap[this.browserID] ? this.emuMap[this.browserID].name : 'Select a Browser'}</span>
                   <i class="icon icon-caret"></i>
                 </a>
                 <ul class="menu full-width">
@@ -184,7 +185,7 @@ class OldWebToday extends LitElement
                 <input class="form-input" type="url" id="url" @input="${(e) => this.replayUrl = e.target.value}" .value="${this.replayUrl}" placeholder="http://example.com/"></input>
               </form>              
 
-              <label class="form-radio" style="padding-right: 0">
+              <label class="form-radio space-top" style="padding-right: 0">
                 <input @click="${(e) => this.replayTs = this.inputTs}" type="radio" name="islive" ?checked="${!!this.replayTs}">
                 <i class="form-icon"></i>Load Archived at Date:
               </label>
@@ -213,7 +214,7 @@ class OldWebToday extends LitElement
               <button style="display: none" @click="${this.onDL}">Save State</button>
             </div>
           </div>
-          <div class="column">
+          <div class="column" style="margin-right: 0px">
             ${this.renderEmulator()}
           </div>
         </div>

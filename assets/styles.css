@@ -8,6 +8,7 @@ html, body {
   font-family: cursive;
   font-variant-caps: petite-caps;
   word-break: break-word;
+  margin-bottom: 0px;
 }
 
 #emu {
@@ -29,7 +30,7 @@ html, body {
   width: 100%;
 }
 
-.form-label {
+.form-label, .form-radio {
   font-variant-caps: all-small-caps;
 }
 
