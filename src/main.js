@@ -177,9 +177,10 @@ class OldWebToday extends LitElement
                 </a>
                 <ul class="menu full-width">
                   ${this.emuOptions.map((emu, i) => html`
+                    ${emu.hidden ? html`` : html`
                     <li class="menu-item">
                       <a @click="${(e) => this.onSelectBrowser(e, emu)}" tabIndex="${i + 1}">${emu.name}</a>
-                    </li>
+                    </li>`}
                   `)}
                 </ul>
               </div>
@@ -215,7 +216,9 @@ class OldWebToday extends LitElement
                 </div>
                 ` : ``}
 
-              <button style="display: none" @click="${this.onDL}">Save State</button>
+              ${this.isRunning && this.emuMap[this.launchID] && this.emuMap[this.launchID].hidden ? html`
+              <button @click="${this.onDL}">Save State</button>` : ''}
+
             </div>
           </div>
           <div class="column" style="margin-right: 0px">
