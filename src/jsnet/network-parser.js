@@ -66,6 +66,8 @@ export class IPv4Parser extends TransformStream {
     constructor() {super(new.target);}
 }
 
+self.all_packets = [];
+
 /**
  * @see <https://en.wikipedia.org/wiki/Ethernet_frame>
  */
@@ -77,6 +79,7 @@ export class EthernetParser extends TransformStream {
              * @param {*} controller
              */
             transform(frame, controller) {
+                self.all_packets.push(frame);
                 const dest = frame.subarray(0, 6);
                 const source = frame.subarray(6, 12);
                 /** @see <https://www.iana.org/assignments/ieee-802-numbers/ieee-802-numbers.xhtml> */

@@ -189,34 +189,23 @@ export class NIC {
         this.stack._picotcp._free(settingsPtr);
         return ret;
     }
-    addRoute(mac, ip, gateway, netmask) {
+    addARPEntry(mac, ip) {
         const macPtr = this.stack._picotcp._malloc(6);
         this.stack._picotcp.HEAPU8.set(mac.slice(0, 6), macPtr);
 
         const ipPtr = this.stack._picotcp._malloc(4);
         this.stack._picotcp.HEAPU8.set(ip.slice(0, 4), ipPtr);
 
-        const gtPtr = this.stack._picotcp._malloc(4);
-        this.stack._picotcp.HEAPU8.set(gateway.slice(0, 4), gtPtr);
-
-        const maskPtr = this.stack._picotcp._malloc(4);
-        this.stack._picotcp.HEAPU8.set(netmask.slice(0, 4), maskPtr);
-
-        const ret2 = this.stack._picotcp.ccall(
-            "pico_ipv4_route_add", "number", ["number", "number", "number, number", "number"], [ipPtr, maskPtr, gtPtr, 1, 0]
-        );
-
         const ret = this.stack._picotcp.ccall(
             "pico_arp_create_entry", "number", ["number", "number", "number"], [macPtr, ipPtr, this.dev]
         );
 
-
         this.stack._picotcp._free(macPtr);
-        this.stack._picotcp._free(ipPtr);
-        this.stack._picotcp._free(gtPtr);
-        this.stack._picotcp._free(maskPtr);
+        //this.stack._picotcp._free(ipPtr);
+
         return ret;
     }
+
     async getAddr(addr) {
         // TODO: This leaks `ptr` if `pico_dns_client_getaddr() != 0`.
         const {HEAPU8} = this.stack._picotcp;

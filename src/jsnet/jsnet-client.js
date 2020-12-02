@@ -9,6 +9,8 @@ export default class JSNetClient
       proxyIP = "10.0.2.2",
       proxyPort = 6082,
       jsnetUrl = "jsnet.js",
+      clientMAC = null,
+      clientIP = null,
       recvCallback = null
   }) {
     this.netWorker = new Worker(jsnetUrl);
@@ -32,6 +34,8 @@ export default class JSNetClient
       replayTs,
       proxyIP,
       proxyPort,
+      clientIP,
+      clientMAC,
     }, [this.netChannel.port1]);
 
     this.netChannel.port2.onmessage = (event) => {

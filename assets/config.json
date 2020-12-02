@@ -60,8 +60,8 @@
     }
   },
   {
-    "id": "ie6",
-    "name": "Internet Explorer 6 (Win98)",
+    "id": "ie6-full-boot",
+    "name": "(Full Boot) Internet Explorer 6 (Win98)",
     "type": "v86",
     "opts": {
       "imagePath": "images/v86/",
@@ -70,14 +70,16 @@
     }
   },
   {
-    "id": "ie6-state",
-    "name": "Internet Explorer 6 State Reload (Win98)",
+    "id": "ie6",
+    "name": "Internet Explorer 6 (Win98)",
     "type": "v86",
     "opts": {
       "imagePath": "images/v86/",
       "imageUrl": "images/v86/ie6.img",
       "imageSize": 419430400,
-      "stateUrl": "images/v86/state.bin"
+      "stateUrl": "images/v86/state.bin",
+      "clientMAC": [0, 34, 21, 16, 17, 18],
+      "clientIP": [10, 0, 2, 100]
     }
   }
 

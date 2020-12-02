@@ -30,8 +30,14 @@ let proxyIP = "192.168.1.1";
 let proxyPort = 8080;
 let homePage = "http://192.168.1.1:8080/";
 
+// for adding ARP entry
+let clientMAC = null;
+let clientIP = null;
+
 const rb = RingBuffer.create(1514 * 128);
 let emuPort = null;
+
+let pingOnUpdate = false;
 
 function updateState(data) {
   if (data.replayUrl) {
@@ -55,11 +61,15 @@ self.onmessage = (event) => {
     emuPort = event.data.port;
     emuPort.postMessage(rb.buffer);
   }
+  if (event.data.clientIP) {
+    clientIP = event.data.clientIP;
+  }
+  if (event.data.clientMAC) {
+    clientMAC = event.data.clientMAC;
+  }
   updateState(event.data);
   main();
 };
-
-let pingOnUpdate = false;
 
 const updateProxy = new BroadcastChannel("update-proxy");
 updateProxy.onmessage = (event) => {
@@ -105,6 +115,11 @@ async function main() {
   nic.addIPv4(proxyIP);
 
   nic.startDHCPServer(proxyIP, "255.255.255.0");
+
+  if (clientIP && clientMAC) {
+    console.log("Adding ARP Entry", clientIP, clientMAC);
+    nic.addARPEntry(new Uint8Array(clientMAC), new Uint8Array(clientIP));
+  }
 
   const server = new nic.TCPServerSocket({localPort: proxyPort, localAddress: proxyIP});
 

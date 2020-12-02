@@ -51,7 +51,7 @@ export default class OWTV86Browser extends LitElement
           size: this.opts.imageSize
       },
       autostart: true,
-      network_adapter: (bus) => new V86Network(bus, this.url, this.ts)
+      network_adapter: (bus) => new V86Network(bus, this.url, this.ts, this.opts.clientIP, this.opts.clientMAC)
     };
 
     let stateLoad = false;
@@ -101,11 +101,13 @@ export default class OWTV86Browser extends LitElement
 // ===========================================================================
 class V86Network
 {
-  constructor(bus, replayUrl, replayTs) {
+  constructor(bus, replayUrl, replayTs, clientIP, clientMAC) {
     console.log("URL", replayUrl);
     console.log("TS", replayTs);
     
-    this.jsnet = new JSNetClient({jsnetUrl: "dist/jsnet.js", replayTs, replayUrl});
+    this.jsnet = new JSNetClient({
+      jsnetUrl: "dist/jsnet.js",
+      replayTs, replayUrl, clientIP, clientMAC});
     this.bus = bus;
 
     this.bus.register("net0-send", (data) => this.jsnet.send(data), this);

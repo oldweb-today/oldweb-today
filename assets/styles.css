@@ -39,11 +39,11 @@ html, body {
 
 .controls {
   height: 100%;
+  max-width: 225px;
 }
 
 .controls .form-group {
   margin-bottom: 1em;
-  width: 250px;
 }
 
 oldweb-today {

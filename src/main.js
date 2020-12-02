@@ -161,7 +161,7 @@ class OldWebToday extends LitElement
       <div class="container">
         <div class="columns">
           <div class="column controls">
-            <h1 class="owt-title">OldWeb.Today</h1>
+            <h2 class="owt-title">OldWeb.Today</h2>
             <div class="form-group">
               <label for="browser" class="form-label space-top">Browser:</label>
 
@@ -184,18 +184,16 @@ class OldWebToday extends LitElement
                 <input class="form-input" type="url" id="url" @input="${(e) => this.replayUrl = e.target.value}" .value="${this.replayUrl}" placeholder="http://example.com/"></input>
               </form>              
 
-              <label for="dt" class="form-label space-top">Archive Date or Live Web:</label>
-              <div class="flex-form">
-                <label class="form-radio" style="padding-right: 0">
-                  <input @click="${(e) => this.replayTs = this.inputTs}" type="radio" name="islive" ?checked="${!!this.replayTs}">
-                  <i class="form-icon"></i>
-                </label>
-                <input class="form-input" type="datetime-local" id="dt" ?disabled="${!this.replayTs}"
-                 @change="${this.onChangeTs}" .value="${this.tsToDateMin(this.inputTs)}"></input>
-              </div>
+              <label class="form-radio" style="padding-right: 0">
+                <input @click="${(e) => this.replayTs = this.inputTs}" type="radio" name="islive" ?checked="${!!this.replayTs}">
+                <i class="form-icon"></i>Load Archived at Date:
+              </label>
+              <input class="form-input" type="datetime-local" id="dt" ?disabled="${!this.replayTs}"
+                @change="${this.onChangeTs}" .value="${this.tsToDateMin(this.inputTs)}"></input>
+
               <label class="form-radio">
                 <input @click="${(e) => this.replayTs = ""}" type="radio" name="islive" ?checked="${!this.replayTs}">
-                <i class="form-icon"></i>Live 
+                <i class="form-icon"></i>Load from Live Web
               </label>
 
               ${this.showUpdateMessage ? html`
@@ -240,6 +238,9 @@ class OldWebToday extends LitElement
 
   onChangeTs(event) {
     this.inputTs = event.currentTarget.value.replace(/[^\d]/g, "") + "00";
+    if (this.isRunning) {
+      this.replayTs = this.inputTs;
+    }
   }
 
   tsToDateMin(ts) {
