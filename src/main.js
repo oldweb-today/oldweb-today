@@ -69,7 +69,7 @@ class OldWebToday extends LitElement
     }
 
     this.parseOpts();
-    window.addEventListener("hashchange", () => this.parseOpts());
+    window.addEventListener("hashchange", () => this.parseOpts(true));
     window.addEventListener("popstate", () => this.parseOpts());
 
     // start running only on initial load
@@ -85,7 +85,7 @@ class OldWebToday extends LitElement
       this.updateHash();
     }
 
-    if (this.isRunning && changedProps.get("replayTs")) {
+    if (this.isRunning && changedProps.has("replayTs") && !this.isLoading) {
       this.updateChannel.postMessage({replayTs: this.replayTs});
 
       this.showUpdateMessage = true;
@@ -100,14 +100,18 @@ class OldWebToday extends LitElement
     return this;
   }
 
-  parseOpts() {
+  parseOpts(hashchange) {
     const query = new URL(window.location.href).searchParams;
     this.browserID = query.get("browser");
 
     const m = window.location.hash.slice(1).match(/\/?(?:([\d]+)\/)?(.*)/);
     if (m) {
-      this.replayTs = m[1];
+      this.replayTs = m[1] || "";
       this.replayUrl = m[2] || "http://example.com/";
+    }
+
+    if (hashchange && this.isRunning && this.replayUrl !== this.launchReplayUrl) {
+      window.location.reload();
     }
   }
 
@@ -182,7 +186,7 @@ class OldWebToday extends LitElement
 
               <form @submit="${this.onUrlUpdate}" class="space-top">
                 <label class="form-label" for="url">URL</label>
-                <input class="form-input" type="url" id="url" @input="${(e) => this.replayUrl = e.target.value}" .value="${this.replayUrl}" placeholder="http://example.com/"></input>
+                <input class="form-input" type="url" id="url" .value="${this.replayUrl}" placeholder="http://example.com/"></input>
               </form>              
 
               <label class="form-radio space-top" style="padding-right: 0">
@@ -232,6 +236,7 @@ class OldWebToday extends LitElement
 
   onUrlUpdate(event) {
     event.preventDefault();
+    this.replayUrl = this.renderRoot.querySelector("#url").value;
     if (this.isRunning && this.replayUrl !== this.launchReplayUrl) {
       window.location.reload();
     }

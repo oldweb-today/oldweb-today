@@ -11,7 +11,7 @@ import TransformStream from "./transform-stream.js";
 
 import RingBuffer from "sab-ring-buffer/ringbuffer.js";
 
-const DEBUG = true;
+const DEBUG = false;
 
 
 const iterator = reader => ({
@@ -40,16 +40,16 @@ let emuPort = null;
 let pingOnUpdate = false;
 
 function updateState(data) {
-  if (data.replayUrl) {
+  if (data.replayUrl !== undefined) {
     replayUrl = data.replayUrl;
   }
-  if (data.replayTs) {
+  if (data.replayTs !== undefined) {
     replayTs = data.replayTs;
   }
-  if (data.proxyIP) {
+  if (data.proxyIP !== undefined) {
     proxyIP = data.proxyIP;
   }
-  if (data.proxyPort) {
+  if (data.proxyPort !== undefined) {
     proxyPort = data.proxyPort;
   }
   homePage = `http://${proxyIP}:${proxyPort}/`;
