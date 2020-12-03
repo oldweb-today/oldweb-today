@@ -60,6 +60,19 @@
     }
   },
   {
+    "id": "ie4-ns",
+    "name": "(Full Boot) Internet Explorer 4",
+    "type": "v86",
+    "opts": {
+      "imagePath": "images/v86/",
+      "imageUrl": "images/v86/ie4-ns.img",
+      "imageSize": 419430400,
+      "clientMAC": [0, 34, 21, 16, 17, 18],
+      "clientIP": [10, 0, 2, 100]
+     },
+    "hidden": true
+  },
+  {
     "id": "ie6-full-boot",
     "name": "(Full Boot) Internet Explorer 6 (Win98)",
     "type": "v86",

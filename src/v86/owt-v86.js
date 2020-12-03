@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 
+const usePoll = true;
 
 // ===========================================================================
 export default class OWTV86Browser extends LitElement
@@ -104,17 +105,21 @@ class V86Network
   constructor(bus, replayUrl, replayTs, clientIP, clientMAC) {
     console.log("URL", replayUrl);
     console.log("TS", replayTs);
+
+    const recvCallback = usePoll ? null : (data) => this.recv(data);
     
     this.jsnet = new JSNetClient({
       jsnetUrl: "dist/jsnet.js",
       replayTs, replayUrl, clientIP, clientMAC,
-      recvCallback: (data) => this.recv(data)
+      recvCallback,
     });
     this.bus = bus;
 
     this.bus.register("net0-send", (data) => this.jsnet.send(data), this);
 
-    //this.loop = setInterval(() => this.recvLoop(), 10);
+    if (usePoll) {
+      this.loop = setInterval(() => this.recvLoop(), 10);
+    }
   }
 
   recv(data) {

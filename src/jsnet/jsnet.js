@@ -142,7 +142,20 @@ function FindProxyForURL(url, host)
 `;
 
   async function handleResponse(socket) {
-    const req = new TextDecoder().decode((await socket.readable.getReader().read()).value);
+    let req = null;
+
+    try {
+      req = new TextDecoder().decode((await socket.readable.getReader().read()).value);
+    } catch (e) {
+      console.log(e);
+      sendResponse({
+        content: "Server Error",
+        status: 500,
+        statusText: "Server Error",
+        writer
+      });
+      return;
+    }
 
     if (pingOnUpdate) {
       updateProxy.postMessage({done: true});
@@ -186,6 +199,29 @@ function FindProxyForURL(url, host)
     const fetchUrl = "https://cors-anywhere.herokuapp.com/" + (replayTs ? `https://web.archive.org/web/${replayTs}id_/${targetUrl}` : targetUrl);
 
     const resp = await fetch(fetchUrl);
+
+    if (resp.status !== 200 && !resp.headers.get("memento-datetime")) {
+      let msg = "";
+
+      switch (resp.status) {
+        case 429:
+          msg = "Too Many Requests. Please try again later";
+          break;
+
+        case 404:
+          msg = "Page Not Found";
+          break;
+      }
+
+      sendResponse({
+        content: `Sorry, an error has occured.\n(Status ${resp.status}) ${msg}`,
+        status: 400,
+        statusText: "Bad Request",
+        writer
+      });
+      return;
+    }
+
     const content = await resp.arrayBuffer();
     const { status, statusText } = resp;
     const contentType = resp.headers.get("content-type");
