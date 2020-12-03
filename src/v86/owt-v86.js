@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 
 const usePoll = true;
+const preload = false;
 
 // ===========================================================================
 export default class OWTV86Browser extends LitElement
@@ -35,6 +36,18 @@ export default class OWTV86Browser extends LitElement
 
   async initEmu() {
     const emuDiv = this.renderRoot.querySelector("#emu");
+    let hda = null;
+
+    if (preload) {
+      const resp = await fetch(this.opts.imageUrl);
+      hda = {buffer: await resp.arrayBuffer()}
+    } else {
+      hda = {
+        url: this.opts.imageUrl,
+        async: true,
+        size: this.opts.imageSize
+      }
+    }
 
     const initOpts =  {
       screen_container: emuDiv,
@@ -46,11 +59,7 @@ export default class OWTV86Browser extends LitElement
       vga_bios: {
           url: this.opts.imagePath + "vgabios.bin",
       },
-      hda: {
-          url: this.opts.imageUrl,
-          async: true,
-          size: this.opts.imageSize
-      },
+      hda,
       autostart: true,
       network_adapter: (bus) => new V86Network(bus, this.url, this.ts, this.opts.clientIP, this.opts.clientMAC)
     };

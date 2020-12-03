@@ -202,6 +202,7 @@ function FindProxyForURL(url, host)
 
     if (resp.status !== 200 && !resp.headers.get("memento-datetime")) {
       let msg = "";
+      let status = 400;
 
       switch (resp.status) {
         case 429:
@@ -210,12 +211,13 @@ function FindProxyForURL(url, host)
 
         case 404:
           msg = "Page Not Found";
+          status = resp.status;
           break;
       }
 
       sendResponse({
         content: `Sorry, an error has occured.\n(Status ${resp.status}) ${msg}`,
-        status: 400,
+        status,
         statusText: "Bad Request",
         writer
       });
@@ -236,6 +238,8 @@ function FindProxyForURL(url, host)
 
     writer.write(encoder.encode(`HTTP/1.0 ${status} ${statusText}\r\n\
 Content-Type: ${contentType}\r\n\
+Connection: close\r\n\
+Proxy-Connection: close\r\n\
 Content-Length: ${payload.byteLength}\r\n\
 \r\n`));
 
@@ -244,8 +248,10 @@ Content-Length: ${payload.byteLength}\r\n\
   }
 
   function sendRedirect({writer, redirect}) {
-    writer.write(encoder.encode(`HTTP/1.0 302 Redirect\r\n\
+    writer.write(encoder.encode(`HTTP/1.0 301 Permanent Redirect\r\n\
 Content-Type: text/plain\r\n\
+Connection: close\r\n\
+Proxy-Connection: close\r\n\
 Content-Length: 0\r\n\
 Location: ${redirect}\r\n\
 \r\n`));

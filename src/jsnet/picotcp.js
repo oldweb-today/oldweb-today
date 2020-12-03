@@ -1665,7 +1665,7 @@ var ASM_CONSTS = [function($0) { Module.pointers[$0] = { writable: new SyncReada
  function($0, $1) { const device = Module.pointers[$0]; const buffer = device.writable._read(); if (buffer === device.writable.EOF) return -1; if (!buffer) device.writable._onData = () => { Module._js_wakeup($1, $0); }; if (!buffer) return 0; Module._readBuffer = buffer; return buffer.byteLength; },
  function($0) { writeArrayToMemory(Module._readBuffer, $0); },
  function($0, $1) { const _unread = (reader, value) => { reader._read = new Proxy(reader._read, { apply(target, thisArg, args) { thisArg._read = target; return value; } }); }; const device = Module.pointers[$0]; if ($1 < Module._readBuffer.byteLength) { _unread(device.writable, Module._readBuffer.subarray($1)); } Module._readBuffer = null; },
- function($0) { Module.pointers[$0].readable._close(); },
+ function($0) { Module.pointers[$0] && Module.pointers[$0]._readable && Module.pointers[$0].readable._close(); },
  function($0, $1) { Module.pointers[$0] = { name: UTF8ToString($1), writable: new SyncReadableWritableStream(), readable: new SyncWritableReadableStream(), }; },
  function($0) { return Module.pointers[$0].readable.desiredSize },
  function($0, $1, $2) { Module.pointers[$0].readable._write(HEAPU8.slice($1, $1 + $2)) },

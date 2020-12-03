@@ -1,96 +1,121 @@
 [
   {
     "id": "nm2-mac",
-    "name": "NCAS Mosaic 2.0.1 (MacOS)",
+    "name": "NCSA Mosaic 2 (MacOS)",
     "type": "bas",
     "opts": {
-      "imagePath": "../images/bas/",
-      "imageUrl": "../images/bas/hd-ie-m.img",
+      "imagePath": "https://dh-preserve.sfo2.cdn.digitaloceanspaces.com/owt/images/bas/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/hd-ie-m.img.gz",
       "emuBrowserId": "br-nm2"
     }
   },
   {
     "id": "nm3-mac",
-    "name": "NCAS Mosaic 3.0B4 (MacOS)",
+    "name": "NCSA Mosaic 3 (MacOS)",
     "type": "bas",
     "opts": {
-      "imagePath": "../images/bas/",
-      "imageUrl": "../images/bas/hd-ns.img",
+      "imagePath": "https://dh-preserve.sfo2.cdn.digitaloceanspaces.com/owt/images/bas/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/hd-ns.img.gz",
       "emuBrowserId": "br-nm3"
     }
   },
   {
     "id": "ml-mac",
-    "name": "MacLynx 2.0 (MacOS)",
+    "name": "MacLynx 2 (MacOS)",
     "type": "bas",
     "opts": {
-      "imagePath": "../images/bas/",
-      "imageUrl": "../images/bas/hd-ns.img",
+      "imagePath": "https://dh-preserve.sfo2.cdn.digitaloceanspaces.com/owt/images/bas/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/hd-ns.img.gz",
       "emuBrowserId": "br-ml2"
     }
   },
   {
     "id": "ns3-mac",
-    "name": "Netscape 3.04 (MacOS)",
+    "name": "Netscape 3 (MacOS)",
     "type": "bas",
     "opts": {
-      "imagePath": "../images/bas/",
-      "imageUrl": "../images/bas/hd-ns.img",
+      "imagePath": "https://dh-preserve.sfo2.cdn.digitaloceanspaces.com/owt/images/bas/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/hd-ns.img.gz",
       "emuBrowserId": "br-ns3"
     }
   },
   {
     "id": "ns4-mac",
-    "name": "Netscape 4.07 (MacOS)",
+    "name": "Netscape 4 (MacOS)",
     "type": "bas",
     "opts": {
-      "imagePath": "../images/bas/",
-      "imageUrl": "../images/bas/hd-ns.img",
+      "imagePath": "https://dh-preserve.sfo2.cdn.digitaloceanspaces.com/owt/images/bas/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/hd-ns.img.gz",
       "emuBrowserId": "br-ns4"
     }
   },
   {
+    "id": "ns4-win",
+    "name": "Netscape 4 (Win98)",
+    "type": "v86",
+    "opts": {
+      "imagePath": "https://dh-preserve.sfo2.cdn.digitaloceanspaces.com/owt/images/v86/",
+      "imageUrl": "https://dh-preserve.sfo2.cdn.digitaloceanspaces.com/owt/images/v86/ie5-ns4.img",
+      "imageSize": 419430400,
+      "stateUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/v86/state-ns4.bin.gz",
+      "clientMAC": [0, 34, 21, 16, 17, 18],
+      "clientIP": [10, 0, 2, 100]
+    }
+  },
+  {
     "id": "ie4-mac",
-    "name": "IE 4.01 (MacOS)",
+    "name": "IE 4 (MacOS)",
     "type": "bas",
     "opts": {
-      "imagePath": "../images/bas/",
-      "imageUrl": "../images/bas/hd-ie-m.img",
+      "imagePath": "https://dh-preserve.sfo2.cdn.digitaloceanspaces.com/owt/images/bas/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/hd-ie-m.img.gz",
       "emuBrowserId": "br-ie4"
     }
   },
   {
-    "id": "ie4-ns",
-    "name": "(Full Boot) Internet Explorer 4",
+    "id": "ie5-full-boot",
+    "name": "(Slow Full Boot) IE5 + Netscape 4 (Win98)",
     "type": "v86",
     "opts": {
-      "imagePath": "images/v86/",
-      "imageUrl": "images/v86/ie4-ns.img",
-      "imageSize": 419430400,
-      "clientMAC": [0, 34, 21, 16, 17, 18],
-      "clientIP": [10, 0, 2, 100]
-     },
+      "imagePath": "https://dh-preserve.sfo2.cdn.digitaloceanspaces.com/owt/images/v86/",
+      "imageUrl": "https://dh-preserve.sfo2.cdn.digitaloceanspaces.com/owt/images/v86/ie5-ns4.img",
+      "imageSize": 419430400
+    },
     "hidden": true
   },
   {
     "id": "ie6-full-boot",
-    "name": "(Full Boot) Internet Explorer 6 (Win98)",
+    "name": "(Slow Full Boot) IE6 (Win98)",
     "type": "v86",
     "opts": {
-      "imagePath": "images/v86/",
-      "imageUrl": "images/v86/ie6.img",
+      "imagePath": "https://dh-preserve.sfo2.cdn.digitaloceanspaces.com/owt/images/v86/",
+      "imageUrl": "https://dh-preserve.sfo2.cdn.digitaloceanspaces.com/owt/images/v86/ie6.img",
       "imageSize": 419430400
+    },
+    "hidden": true
+  },
+  {
+    "id": "ie5",
+    "name": "IE 5 (Win98)",
+    "type": "v86",
+    "opts": {
+      "imagePath": "https://dh-preserve.sfo2.cdn.digitaloceanspaces.com/owt/images/v86/",
+      "imageUrl": "https://dh-preserve.sfo2.cdn.digitaloceanspaces.com/owt/images/v86/ie5-ns4.img",
+      "imageSize": 419430400,
+      "stateUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/v86/state-ie5.bin.gz",
+      "clientMAC": [0, 34, 21, 16, 17, 18],
+      "clientIP": [10, 0, 2, 100]
     }
   },
   {
     "id": "ie6",
-    "name": "Internet Explorer 6 (Win98)",
+    "name": "IE 6 (Win98)",
     "type": "v86",
     "opts": {
-      "imagePath": "images/v86/",
-      "imageUrl": "images/v86/ie6.img",
+      "imagePath": "https://dh-preserve.sfo2.cdn.digitaloceanspaces.com/owt/images/v86/",
+      "imageUrl": "https://dh-preserve.sfo2.cdn.digitaloceanspaces.com/owt/images/v86/ie6.img",
       "imageSize": 419430400,
-      "stateUrl": "images/v86/state.bin",
+      "stateUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/v86/state-ie6.bin.gz",
       "clientMAC": [0, 34, 21, 16, 17, 18],
       "clientIP": [10, 0, 2, 100]
     }
