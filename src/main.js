@@ -23,14 +23,16 @@ class OldWebToday extends LitElement
     this.launchID = "";
     this.isLoading = false;
 
-    this.showUpdateMessage = false;
+    this.showUrlUpdateMessage = false;
+    this.showTsUpdateMessage = false;
 
     this.emuOptions = [];
     this.emuMap = {};
 
     this.updateChannel = new BroadcastChannel("update-proxy");
     this.updateChannel.onmessage = () => {
-      this.showUpdateMessage = false;
+      this.showUrlUpdateMessage = false;
+      this.showTsUpdateMessage = false;
       this.isLoading = false;
     };
 
@@ -54,7 +56,8 @@ class OldWebToday extends LitElement
       isLoading: { type: Boolean },
       launchID: { type: String },
       browserID: { type: String },
-      showUpdateMessage: { type: Boolean },
+      showUrlUpdateMessage: { type: Boolean },
+      showTsUpdateMessage: { type: Boolean },
       emuOptions: { type: Array }
     }
   }
@@ -85,10 +88,16 @@ class OldWebToday extends LitElement
       this.updateHash();
     }
 
-    if (this.isRunning && changedProps.has("replayTs") && !this.isLoading) {
-      this.updateChannel.postMessage({replayTs: this.replayTs});
+    if (this.isRunning && !this.isLoading) {
+      if (changedProps.has("replayTs")) {
+        this.updateChannel.postMessage({replayTs: this.replayTs});
+        this.showTsUpdateMessage = true;
+      }
 
-      this.showUpdateMessage = true;
+      if (changedProps.has("replayUrl")) {
+        this.updateChannel.postMessage({replayUrl: this.replayUrl});
+        this.showUrlUpdateMessage = true;
+      }
     }
 
     if (changedProps.has("browserID")) {
@@ -110,9 +119,9 @@ class OldWebToday extends LitElement
       this.replayUrl = m[2] || "http://example.com/";
     }
 
-    if (hashchange && this.isRunning && this.replayUrl !== this.launchReplayUrl) {
-      window.location.reload();
-    }
+    // if (hashchange && this.isRunning && this.replayUrl !== this.launchReplayUrl) {
+    //   window.location.reload();
+    // }
   }
 
   updateHash() {
@@ -153,66 +162,88 @@ class OldWebToday extends LitElement
       return html`<div class="err">Not a valid browser. Please select a browser.</div>`;
     }
 
-    if (emu.type === "v86") {
+    if (emu.emu === "v86") {
       return html`<owt-v86-browser .opts="${emu.opts}" url="${this.replayUrl}" ts="${this.replayTs}"></owt-v86-browser>`;
-    } else if (emu.type === "bas") {
+    } else if (emu.emu === "bas") {
       return html`<owt-bas-browser .opts="${emu.opts}" url="${this.replayUrl}" ts="${this.replayTs}"></owt-bas-browser>`;
+    } else {
+      return html`<div class="err">Unknown emulator type: ${emu.emu}</div>`;
     }
   }
 
   render() {
+    const currEmu = this.emuMap[this.browserID];
+
     return html`
       <div class="container">
         <div class="columns">
           <div class="column controls">
             <h2 class="owt-title">OldWeb.Today</h2>
-            <i class="full-width" style="text-align: center; display: block">JS Browser Emulation</i>
+            <i class="full-width" style="text-align: center; display: block">JS Browser Emulation <img src="./assets/new.gif"/></i>
             <div class="form-group">
               <label for="browser" class="form-label space-top">Browser:</label>
 
               <div class="dropdown full-width">
                 <a class="btn dropdown-toggle" tabindex="0">
-                  <span style="font-size: smaller">${this.emuMap[this.browserID] ? this.emuMap[this.browserID].name : 'Select a Browser'}</span>
-                  <i class="icon icon-caret"></i>
+                  <span class="curr-browser">
+                    ${currEmu ? html`
+                        <img width="24" height="24" src="./assets/icons/${currEmu.icon}"/>
+                        <img style="margin-left: 0.5em" width="24" height="24" src="./assets/icons/${currEmu.os}.png"/>
+                        <span style="margin-left: 0.5em; vertical-align: super;">${currEmu.name}</span>
+                    `: 'Select a Browser'}</span>
+                  <i class="icon icon-caret" style="vertical-align: baseline"></i>
                 </a>
-                <ul class="menu full-width">
+                <ul class="menu" style="width: 234px">
                   ${this.emuOptions.map((emu, i) => html`
                     ${emu.hidden ? html`` : html`
-                    <li class="menu-item">
-                      <a @click="${(e) => this.onSelectBrowser(e, emu)}" tabIndex="${i + 1}">${emu.name}</a>
+                    <li class="menu-item" style="">
+                      <a style="display: flex" @click="${(e) => this.onSelectBrowser(e, emu)}" tabIndex="${i + 1}">
+                        <img width="24" height="24" src="./assets/icons/${emu.icon}"/>
+                        <img style="margin-left: 1.0em" width="24" height="24" src="./assets/icons/${emu.os}.png"/>
+                        <span style="margin-left: 1.5em; vertical-align: super;">${emu.name}</span>
+                      </a>
                     </li>`}
                   `)}
                 </ul>
               </div>
 
               <form @submit="${this.onUrlUpdate}" class="space-top">
-                <label class="form-label" for="url">URL</label>
+                <label class="form-label" for="url">URL:</label>
                 <input class="form-input" type="url" id="url" .value="${this.replayUrl}" placeholder="http://example.com/"></input>
-              </form>              
+              </form>
+
+              ${this.showUrlUpdateMessage ? html`
+              <div class="msg" style="background-color: aliceblue">
+                Home Page URL Updated!<br/>Click the <i>Home</i> button in the emulated browser to load the new URL.
+              </div>` : html``}
 
               <label class="form-radio space-top" style="padding-right: 0">
                 <input @click="${(e) => this.replayTs = this.inputTs}" type="radio" name="islive" ?checked="${!!this.replayTs}">
-                <i class="form-icon"></i>Load Archived at Date:
+                <i class="form-icon"></i>Browse Archives At:
               </label>
-              <input class="form-input" type="datetime-local" id="dt" ?disabled="${!this.replayTs}"
-                @change="${this.onChangeTs}" .value="${this.tsToDateMin(this.inputTs)}"></input>
+              <form @submit="${this.onChangeTs}">
+                <input class="form-input" type="text" id="dt" ?disabled="${!this.replayTs}"
+                 .value="${this.tsToDateMin(this.inputTs)}" placeholder="YYYY-MM-DD hh:mm:ss"></input>
+              </form>
 
               <label class="form-radio">
                 <input @click="${(e) => this.replayTs = ""}" type="radio" name="islive" ?checked="${!this.replayTs}">
-                <i class="form-icon"></i>Load from Live Web
+                <i class="form-icon"></i>Browse Live Web
               </label>
 
-              ${this.showUpdateMessage ? html`
+              ${this.showTsUpdateMessage ? html`
                 <div class="msg" style="background-color: aliceblue">
-                  Date Updated!<br/>Refresh or reload the emulated browser to start browsing at the new date.
+                  Date Updated!<br/>Click the <i>Refresh</i> button or load a new page in the emulated browser to start browsing at the new date.
                 </div>` : html``}
 
               ${this.isRunning ? html`
                 <div style="margin: 1em 0">
-                  ${!this.isLoading ? html`
+                  <p>${!this.isLoading ? html`
                   <i>Emulated Browser is Running!</i>` : html`
-                  <div class="loading loading-lg"></div><i>Please wait, Emulated Browser is Loading...</i>`}
-                  <button class="btn btn-sm" @click="${this.onCancel}">Stop</button>
+                  <div class="loading loading-lg"></div><i>Please wait, Emulated Browser is Loading...</i>`}</p>
+
+                  <button class="btn btn-sm" @click="${this.onCancel}"><i class="icon icon-cross"></i>&nbsp;Stop</button>
+                  <button class="btn btn-sm" @click="${(e) => window.location.reload()}"><i class="icon icon-refresh"></i>&nbsp;Reload</button>
                 </div>
                 ` : ``}
 
@@ -229,10 +260,6 @@ class OldWebToday extends LitElement
     `;
   }
 
-  onLaunch() {
-    window.location.reload();
-  }
-
   onSelectBrowser(event, emu) {
     this.browserID = emu.id;
   }
@@ -240,13 +267,13 @@ class OldWebToday extends LitElement
   onUrlUpdate(event) {
     event.preventDefault();
     this.replayUrl = this.renderRoot.querySelector("#url").value;
-    if (this.isRunning && this.replayUrl !== this.launchReplayUrl) {
-      window.location.reload();
-    }
+    // if (this.isRunning && this.replayUrl !== this.launchReplayUrl) {
+    //   window.location.reload();
+    // }
   }
 
   onChangeTs(event) {
-    this.inputTs = event.currentTarget.value.replace(/[^\d]/g, "") + "00";
+    this.inputTs = event.currentTarget.value.replace(/[^\d]/g, "");
     if (this.isRunning) {
       this.replayTs = this.inputTs;
     }
@@ -257,15 +284,16 @@ class OldWebToday extends LitElement
       return "";
     }
   
-    if (ts.length < 12) {
-      ts += "000001010000".substr(ts.length);
+    if (ts.length < 14) {
+      ts += "00000101000000".substr(ts.length);
     }
   
     const datestr = (ts.substring(0, 4) + "-" +
       ts.substring(4, 6) + "-" +
-      ts.substring(6, 8) + "T" +
+      ts.substring(6, 8) + " " +
       ts.substring(8, 10) + ":" +
-      ts.substring(10, 12));
+      ts.substring(10, 12) + ":" +
+      ts.substring(12, 14));
   
     return datestr;
   };
@@ -298,8 +326,6 @@ class OldWebToday extends LitElement
     });
   }
 }
-
-
 
 customElements.define("oldweb-today", OldWebToday);
 customElements.define("owt-v86-browser", OWTV86Browser);

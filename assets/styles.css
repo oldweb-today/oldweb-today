@@ -8,7 +8,14 @@ html, body {
   font-family: cursive;
   font-variant-caps: petite-caps;
   word-break: break-word;
+  margin-top: 0.25em;
   margin-bottom: 0px;
+}
+
+.curr-browser {
+  font-size: smaller;
+  vertical-align: middle;
+  font-weight: bold;
 }
 
 #emu {
