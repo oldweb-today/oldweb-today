@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 
 const usePoll = true;
-const preload = false;
+let preload = false;
 
 // ===========================================================================
 export default class OWTV86Browser extends LitElement
@@ -37,6 +37,8 @@ export default class OWTV86Browser extends LitElement
   async initEmu() {
     const emuDiv = this.renderRoot.querySelector("#emu");
     let hda = null;
+
+    preload = !this.opts.stateUrl;
 
     if (preload) {
       const resp = await fetch(this.opts.imageUrl);

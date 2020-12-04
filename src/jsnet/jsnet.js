@@ -20,7 +20,7 @@ const iterator = reader => ({
     return: () => ({}),
 });
 
-async function sleep(timeout) {
+function sleep(timeout) {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 }
 
@@ -65,7 +65,7 @@ self.onmessage = (event) => {
   }
   if (event.data.pollSAB) {
     pollSAB = event.data.pollSAB;
-    rb = RingBuffer.create(1514 * 128);
+    rb = RingBuffer.create(1514 * 256);
     if (event.data.port) {
       emuPort = event.data.port;
       emuPort.postMessage(rb.buffer);
@@ -85,18 +85,22 @@ updateProxy.onmessage = (event) => {
 
 const sabWriter = new WritableStream({
   async write(chunk) {
+    let waitCount = 0;
+
     while (true) {
-      try {
+      if (rb.remaining >= chunk.byteLength + 2) {
         const sizeBuff = new ArrayBuffer(2);
         new DataView(sizeBuff).setUint16(0, chunk.byteLength);
         rb.append(new Uint8Array(sizeBuff));
-
         rb.append(chunk);
-        //console.log(`Writing chunk size: ${chunk.byteLength}`);
         return true;
-      } catch (e) {
-        console.error("not enough space, wait and try again");
+      } else {
+        waitCount++;
         await sleep(100);
+        if (waitCount > 50) {
+          console.warn("Dropping packets due to backup");
+          rb.clear();
+        }
       }
     }
   }
