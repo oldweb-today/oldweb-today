@@ -217,19 +217,18 @@ class OldWebToday extends LitElement
                 Home Page URL Updated!<br/>Click the <i>Home</i> button in the emulated browser to load the new URL.
               </div>` : html``}
 
-              <label class="form-radio space-top" style="padding-right: 0">
-                <input @click="${(e) => this.replayTs = this.inputTs}" type="radio" name="islive" ?checked="${!!this.replayTs}">
-                <i class="form-icon"></i>Browse Archives At:
-              </label>
-              <form @submit="${this.onChangeTs}">
-                <input class="form-input" type="text" id="dt" ?disabled="${!this.replayTs}"
-                 .value="${this.tsToDateMin(this.inputTs)}" placeholder="YYYY-MM-DD hh:mm:ss"></input>
-              </form>
-
-              <label class="form-radio">
+              <label class="form-radio space-top">
                 <input @click="${(e) => this.replayTs = ""}" type="radio" name="islive" ?checked="${!this.replayTs}">
                 <i class="form-icon"></i>Browse Live Web
               </label>
+
+              <label class="form-radio" style="padding-right: 0">
+                <input @click="${(e) => this.replayTs = this.inputTs}" type="radio" name="islive" ?checked="${!!this.replayTs}">
+                <i class="form-icon"></i>Browse Archives At:
+              </label>
+
+              <input @change="${this.onChangeTs}" class="form-input" type="text" id="dt" ?disabled="${!this.replayTs}"
+                .value="${this.tsToDateMin(this.inputTs)}" placeholder="YYYY-MM-DD hh:mm:ss"></input>
 
               ${this.showTsUpdateMessage ? html`
                 <div class="msg" style="background-color: aliceblue">
@@ -239,8 +238,8 @@ class OldWebToday extends LitElement
               ${this.isRunning ? html`
                 <div style="margin: 1em 0">
                   <p>${!this.isLoading ? html`
-                  <i>Emulated Browser is Running!</i>` : html`
-                  <div class="loading loading-lg"></div><i>Please wait, Emulated Browser is Loading...</i>`}</p>
+                  <i>Status: Running</i>` : html`
+                  <div class="loading loading-lg"></div><i>Status: Loading, please wait...</i>`}</p>
 
                   <button class="btn btn-sm" @click="${this.onCancel}"><i class="icon icon-cross"></i>&nbsp;Stop</button>
                   <button class="btn btn-sm" @click="${(e) => window.location.reload()}"><i class="icon icon-refresh"></i>&nbsp;Reload</button>
