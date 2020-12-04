@@ -240,8 +240,10 @@ function FindProxyForURL(url, host)
   function sendResponse({writer, content, status = 200, statusText = "OK", contentType = "text/plain"}) {
     const payload = typeof(content) === "string" ? encoder.encode(content) : new Uint8Array(content);
 
+    const contentTypeStr = (status === 200 && contentType) ? `Content-Type: ${contentType}\r\n` : "";
+
     writer.write(encoder.encode(`HTTP/1.0 ${status} ${statusText}\r\n\
-Content-Type: ${contentType}\r\n\
+${contentTypeStr}\
 Connection: close\r\n\
 Proxy-Connection: close\r\n\
 Content-Length: ${payload.byteLength}\r\n\
