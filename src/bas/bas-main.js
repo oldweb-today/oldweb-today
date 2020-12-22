@@ -1,4 +1,4 @@
-export default function bas_main(config = {}) {
+export default function bas_main(config = {}, progressTarget) {
 
   var SCREEN_WIDTH = parseInt(config.width) || 800;
   var SCREEN_HEIGHT = parseInt(config.height) || 600;
@@ -394,6 +394,12 @@ export default function bas_main(config = {}) {
   var worker = new Worker('dist/bas-worker.js');
 
   worker.postMessage(workerConfig);
+
+  worker.addEventListener("message", (event) => {
+    if (progressTarget) {
+      progressTarget.dispatchEvent(new CustomEvent("dl-progress", {detail: event.data}));
+    }
+  });
   //}
 
   function drawScreen() {

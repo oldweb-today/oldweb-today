@@ -28,7 +28,7 @@ export default class OWTBasiliskII extends LitElement
       canvas: ".bas-canvas",
       width: 1024,
       height: 720,
-    });
+    }, this);
   }
 
   render() {

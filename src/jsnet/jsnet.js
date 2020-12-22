@@ -11,6 +11,8 @@ import TransformStream from "./transform-stream.js";
 
 import RingBuffer from "sab-ring-buffer/ringbuffer.js";
 
+import HttpProxyServer from './httpproxyserver';
+
 const DEBUG = false;
 
 
@@ -106,6 +108,13 @@ const sabWriter = new WritableStream({
   }
 });
 
+function updateCallback() {
+  if (pingOnUpdate) {
+    updateProxy.postMessage({done: true});
+    pingOnUpdate = false;
+  }
+}
+
 
 async function main() {
   const nic = await new NIC(undefined, new Uint8Array([34, 250, 80, 37, 2, 130]));
@@ -134,140 +143,8 @@ async function main() {
 
   const server = new nic.TCPServerSocket({localPort: proxyPort, localAddress: proxyIP});
 
-  const PROXY_PAC = `
-function FindProxyForURL(url, host)
-{
-    if (isInNet(host, "${proxyIP}") || shExpMatch(url, "http://${proxyIP}:${proxyPort}/*")) {
-        return "DIRECT";
-    }
-
-    return "PROXY ${proxyIP}:${proxyPort}";
-}
-`;
-
-  async function handleResponse(socket) {
-    let req = null;
-
-    try {
-      req = new TextDecoder().decode((await socket.readable.getReader().read()).value);
-    } catch (e) {
-      console.log(e);
-      sendResponse({
-        content: "Server Error",
-        status: 500,
-        statusText: "Server Error",
-        writer
-      });
-      return;
-    }
-
-    if (pingOnUpdate) {
-      updateProxy.postMessage({done: true});
-      pingOnUpdate = false;
-    }
-
-    const m = req.match(/GET\s([^\s]+)/);
-    const writer = socket.writable.getWriter();
-
-    let requestURL = m && m[1];
-
-    if (requestURL === "/proxy.pac") {
-      sendResponse({
-        content: PROXY_PAC,
-        contentType: "application/x-ns-proxy-autoconfig",
-        writer
-      });
-      return;
-    }
-
-    if (requestURL === "/" || requestURL === homePage) {
-      sendRedirect({
-        redirect: replayUrl,
-        writer
-      });
-      return;
-    }
-
-    if (!requestURL || !requestURL.startsWith("http://")) {
-      sendResponse({
-        content: "Invalid URL: " + requestURL,
-        status: 400,
-        statusText: "Bad Request",
-        writer
-      });
-      return;
-    }
-
-    const targetUrl = m[1];
-
-    const fetchUrl = "https://cors-anywhere.herokuapp.com/" + (replayTs ? `https://web.archive.org/web/${replayTs}id_/${targetUrl}` : targetUrl);
-
-    const resp = await fetch(fetchUrl);
-
-    if (resp.status !== 200 && !resp.headers.get("memento-datetime")) {
-      let msg = "";
-      let status = 400;
-
-      switch (resp.status) {
-        case 429:
-          msg = "Too Many Requests. Please try again later";
-          break;
-
-        case 404:
-          msg = "Page Not Found";
-          status = resp.status;
-          break;
-      }
-
-      sendResponse({
-        content: `Sorry, an error has occured.\n(Status ${resp.status}) ${msg}`,
-        status,
-        statusText: "Bad Request",
-        writer
-      });
-      return;
-    }
-
-    const content = await resp.arrayBuffer();
-    const { status, statusText } = resp;
-    const contentType = resp.headers.get("content-type");
-
-    sendResponse({content, status, statusText, contentType, writer});
-  }
-
-  const encoder = new TextEncoder();
-
-  function sendResponse({writer, content, status = 200, statusText = "OK", contentType = "text/plain"}) {
-    const payload = typeof(content) === "string" ? encoder.encode(content) : new Uint8Array(content);
-
-    const contentTypeStr = (status === 200 && contentType) ? `Content-Type: ${contentType}\r\n` : "";
-
-    writer.write(encoder.encode(`HTTP/1.0 ${status} ${statusText}\r\n\
-${contentTypeStr}\
-Connection: close\r\n\
-Proxy-Connection: close\r\n\
-Content-Length: ${payload.byteLength}\r\n\
-\r\n`));
-
-    writer.write(payload);
-    writer.close();
-  }
-
-  function sendRedirect({writer, redirect}) {
-    writer.write(encoder.encode(`HTTP/1.0 301 Permanent Redirect\r\n\
-Content-Type: text/plain\r\n\
-Connection: close\r\n\
-Proxy-Connection: close\r\n\
-Content-Length: 0\r\n\
-Location: ${redirect}\r\n\
-\r\n`));
-
-    writer.close();
-  }
-
-
-  for await (const s of iterator(server.readable.getReader())) {
-    handleResponse(s);
+  for await (const socket of iterator(server.readable.getReader())) {
+    new HttpProxyServer({socket, replayUrl, replayTs, proxyIP, homePage, proxyPort, updateCallback}).handleResponse();
   }
 }
 
@@ -289,7 +166,3 @@ async function monitorChannel(name, label) {
   .pipeThrough(printer("ip " + label))
   .pipeTo(new WritableStream);
 }
-
-
-//main();
-//monitor();

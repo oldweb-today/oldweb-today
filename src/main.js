@@ -36,6 +36,9 @@ class OldWebToday extends LitElement
       this.isLoading = false;
     };
 
+    this.dlProgress = 0;
+    this.dlProgressTotal = 0;
+
     this.loadConfig();
   }
 
@@ -58,7 +61,10 @@ class OldWebToday extends LitElement
       browserID: { type: String },
       showUrlUpdateMessage: { type: Boolean },
       showTsUpdateMessage: { type: Boolean },
-      emuOptions: { type: Array }
+      emuOptions: { type: Array },
+
+      dlProgress: { type: Number },
+      dlProgressTotal: { type: Number }
     }
   }
 
@@ -163,9 +169,9 @@ class OldWebToday extends LitElement
     }
 
     if (emu.emu === "v86") {
-      return html`<owt-v86-browser .opts="${emu.opts}" url="${this.replayUrl}" ts="${this.replayTs}"></owt-v86-browser>`;
+      return html`<owt-v86-browser @dl-progress="${this.onDownload}" .opts="${emu.opts}" url="${this.replayUrl}" ts="${this.replayTs}"></owt-v86-browser>`;
     } else if (emu.emu === "bas") {
-      return html`<owt-bas-browser .opts="${emu.opts}" url="${this.replayUrl}" ts="${this.replayTs}"></owt-bas-browser>`;
+      return html`<owt-bas-browser @dl-progress="${this.onDownload}" .opts="${emu.opts}" url="${this.replayUrl}" ts="${this.replayTs}"></owt-bas-browser>`;
     } else {
       return html`<div class="err">Unknown emulator type: ${emu.emu}</div>`;
     }
@@ -239,7 +245,13 @@ class OldWebToday extends LitElement
                 <div style="margin: 1em 0">
                   <p>${!this.isLoading ? html`
                   <i>Status: Running</i>` : html`
-                  <div class="loading loading-lg"></div><i>Status: Loading, please wait...</i>`}</p>
+                  <div class="loading loading-lg"></div>
+                  ${this.dlProgressTotal ? html`
+                  <i>Status: Downloading...</i>
+                  <progress class="progress" value="${this.dlProgress}" max="${this.dlProgressTotal}"></progress>
+                  ` : html`
+                  <i>Status: Loading, please wait...</i>`}
+                  `}</p>
 
                   <button class="btn btn-sm" @click="${this.onCancel}"><i class="icon icon-cross"></i>&nbsp;Stop</button>
                   <button class="btn btn-sm" @click="${(e) => window.location.reload()}"><i class="icon icon-refresh"></i>&nbsp;Reload</button>
@@ -269,6 +281,15 @@ class OldWebToday extends LitElement
     // if (this.isRunning && this.replayUrl !== this.launchReplayUrl) {
     //   window.location.reload();
     // }
+  }
+
+  onDownload(event) {
+    if (event.detail) {
+      this.dlProgressTotal = event.detail.total;
+      this.dlProgress = event.detail.count;
+    } else {
+      this.dlProgressTotal = 0;
+    }
   }
 
   onChangeTs(event) {

@@ -67,7 +67,7 @@ export default class JSNetClient
       const size = new DataView(netRecvBuffer.buffer, netRecvBuffer.byteOffset, netRecvBuffer.byteLength).getUint16(0);
       const chunk = netRecvBuffer.slice(2, 2 + size);
 
-      console.log(`Emu Receive ${chunk.byteLength}`);
+      //console.log(`Emu Receive ${chunk.byteLength}`);
       if (typeof(targetBufferOrFunc) === "function") {
         targetBufferOrFunc(chunk);
       } else {

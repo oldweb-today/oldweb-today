@@ -1,7 +1,10 @@
 import { LitElement, html, css } from 'lit-element';
 
-const usePoll = true;
+const usePoll = false;
 let preload = false;
+
+const DEFAULT_MAC = [0x00, 0x22, 0x15, 0x10, 0x11, 0x12];
+
 
 // ===========================================================================
 export default class OWTV86Browser extends LitElement
@@ -63,18 +66,15 @@ export default class OWTV86Browser extends LitElement
       },
       hda,
       autostart: true,
-      network_adapter: (bus) => new V86Network(bus, this.url, this.ts, this.opts.clientIP, this.opts.clientMAC)
+      network_adapter: (bus) => new V86Network(bus, this.url, this.ts, this.opts.clientIP, this.opts.clientMAC),
+      network_mac: DEFAULT_MAC,
     };
 
     let stateLoad = false;
 
     if (this.opts.stateUrl) {
       try {
-        const resp = await fetch(this.opts.stateUrl);
-        if (resp.status !== 200) {
-          throw new Error("Invalid state response");
-        }
-        const initial_state = await resp.arrayBuffer();
+        const initial_state = await this.loadIncremental(this.opts.stateUrl);
         stateLoad = true;
 
         initOpts.initial_state = initial_state;
@@ -93,6 +93,47 @@ export default class OWTV86Browser extends LitElement
         window.emulator.keyboard_send_scancodes([0x2D]);
       }, 3000);
     }
+  }
+
+  async loadIncremental(url) {
+    const resp = await fetch(this.opts.stateUrl);
+    if (resp.status !== 200) {
+      throw new Error("Invalid state response");
+    }
+    const total = Number(resp.headers.get("x-amz-meta-full-content-length"));
+
+    const reader = resp.body.getReader();
+
+    const chunks = [];
+    let count = 0;
+
+    while(true) {
+      const {done, value} = await reader.read();
+
+      if (done) {
+        break;
+      }
+
+      chunks.push(value);
+      count += value.length;
+
+      console.log(`${count} of ${total}`);
+      const detail = {count, total};
+      this.dispatchEvent(new CustomEvent("dl-progress", {detail}));
+    }
+
+    this.dispatchEvent(new CustomEvent("dl-progress", {}));
+
+    const buffer = new Uint8Array(count);
+
+    count = 0;
+
+    for (const chunk of chunks) {
+      buffer.set(chunk, count);
+      count += chunk.length;
+    }
+
+    return buffer;
   }
 
   render() {

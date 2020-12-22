@@ -380,6 +380,15 @@ function startEmulator(parentConfig) {
       return inputBufferView[addr];
     },
 
+    totalDependencies: 0,
+    monitorRunDependencies: function(left) {
+      this.totalDependencies = Math.max(this.totalDependencies, left);
+
+      if (left === 0) {
+        self.postMessage({});
+      }
+    },
+
     print: console.log.bind(console),
 
     printErr: console.warn.bind(console),
@@ -407,6 +416,13 @@ function startEmulator(parentConfig) {
       var xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
       xhr.responseType = 'arraybuffer';
+      if (url.endsWith(".img")) {
+        xhr.onprogress = function(event) {
+          const data = {count: event.loaded, total: event.total};
+          self.postMessage(data);
+        }
+      }
+
       xhr.onload = function xhr_onload() {
         let result;
         if (xhr.status == 200 || (xhr.status == 0 && xhr.response)) { // file URLs can return 0
