@@ -1,0 +1,4 @@
+name = "owt-site-cors-proxy"
+type = "javascript"
+#account_id = <your account here>
+#workers_dev = true

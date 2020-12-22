@@ -1,0 +1,143 @@
+[
+  {
+    "id": "nm2-mac",
+    "name": "NCSA Mosaic 2",
+    "os": "macos",
+    "emu": "bas",
+    "icon": "mosaic.png",
+    "opts": {
+      "imagePath": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/hd-ie-m.img.gz",
+      "emuBrowserId": "br-nm2"
+    }
+  },
+  {
+    "id": "nm3-mac",
+    "name": "NCSA Mosaic 3",
+    "os": "macos",
+    "emu": "bas",
+    "icon": "mosaic.png",
+    "opts": {
+      "imagePath": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/hd-ns.img.gz",
+      "emuBrowserId": "br-nm3"
+    }
+  },
+  {
+    "id": "ml-mac",
+    "name": "MacLynx 2",
+    "os": "macos",
+    "emu": "bas",
+    "icon": "maclynx.png",
+    "opts": {
+      "imagePath": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/hd-ns.img.gz",
+      "emuBrowserId": "br-ml2"
+    }
+  },
+  {
+    "id": "ns3-mac",
+    "name": "Navigator 3",
+    "os": "macos",
+    "emu": "bas",
+    "icon": "ns3.png",
+    "opts": {
+      "imagePath": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/hd-ns.img.gz",
+      "emuBrowserId": "br-ns3"
+    }
+  },
+  {
+    "id": "ns4-mac",
+    "name": "Navigator 4",
+    "os": "macos",
+    "emu": "bas",
+    "icon": "ns4.png",
+    "opts": {
+      "imagePath": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/hd-ns.img.gz",
+      "emuBrowserId": "br-ns4"
+    }
+  },
+  {
+    "id": "ie4-mac",
+    "name": "IE 4",
+    "os": "macos",
+    "emu": "bas",
+    "icon": "ie4-mac.png",
+    "opts": {
+      "imagePath": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/bas/hd-ie-m.img.gz",
+      "emuBrowserId": "br-ie4"
+    }
+  },
+  {
+    "id": "ie5-full-boot",
+    "name": "(Slow Full Boot) IE5 + Netscape 4",
+    "os": "win98",
+    "emu": "v86",
+    "opts": {
+      "imagePath": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/v86/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/v86/ie5-ns4-v2.img",
+      "imageSize": 419430400
+    },
+    "hidden": true
+  },
+  {
+    "id": "ns4-win",
+    "name": "Navigator 4",
+    "os": "win98",
+    "emu": "v86",
+    "icon": "ns4.png",
+    "opts": {
+      "imagePath": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/v86/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/v86/ie5-ns4-v2.img",
+      "imageSize": 419430400,
+      "stateUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/v86/state-ns4-v2.bin.gz",
+      "clientMAC": [0, 34, 21, 16, 17, 18],
+      "clientIP": [10, 0, 2, 100]
+    }
+  },
+  {
+    "id": "ie6-full-boot",
+    "name": "(Slow Full Boot) IE6",
+    "os": "win98",
+    "emu": "v86",
+    "opts": {
+      "imagePath": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/v86/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/v86/ie6-v2.img",
+      "imageSize": 419430400
+    },
+    "hidden": true
+  },
+  {
+    "id": "ie5",
+    "name": "IE 5",
+    "os": "win98",
+    "emu": "v86",
+    "icon": "ie5.png",
+    "opts": {
+      "imagePath": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/v86/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/v86/ie5-ns4-v2.img",
+      "imageSize": 419430400,
+      "stateUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/v86/state-ie5-v2.bin.gz",
+      "clientMAC": [0, 34, 21, 16, 17, 18],
+      "clientIP": [10, 0, 2, 100]
+    }
+  },
+  {
+    "id": "ie6",
+    "name": "IE 6",
+    "os": "win98",
+    "emu": "v86",
+    "icon": "ie6.png",
+    "opts": {
+      "imagePath": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/v86/",
+      "imageUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/v86/ie6-v2.img",
+      "imageSize": 419430400,
+      "stateUrl": "https://dh-preserve.sfo2.digitaloceanspaces.com/owt/images/v86/state-ie6-v2.bin.gz",
+      "clientMAC": [0, 34, 21, 16, 17, 18],
+      "clientIP": [10, 0, 2, 100]
+    }
+  }
+]

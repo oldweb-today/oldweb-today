@@ -1,10 +1,13 @@
-// Copyright 2018 The Emulation-as-a-Service Authors.
+// Parts Copyright 2018 The Emulation-as-a-Service Authors.
 // SPDX-License-Identifier: GPL-2.0-or-later
+
+// Parts Copyright Webrecorder Software
+// AGPL3
 
 import "./streams-polyfills.js";
 
 import {broadcastStream} from "./broadcast-stream.js";
-import {NIC, parseMAC, NetworkStack} from "./webnetwork.js";
+import {NIC} from "./webnetwork.js";
 
 import {EthernetParser, IPv4Parser} from "./network-parser.js";
 import TransformStream from "./transform-stream.js";
@@ -82,8 +85,6 @@ const updateProxy = new BroadcastChannel("update-proxy");
 updateProxy.onmessage = (event) => {
   updateState(event.data);
 };
-
-
 
 const sabWriter = new WritableStream({
   async write(chunk) {
