@@ -8,21 +8,36 @@
 (Screenshot of: [https://oldweb.today/?browser=ns3-mac#19960101/http://geocities.com/](https://oldweb.today/?browser=ns3-mac#19960101/http://geocities.com/))
 
 
+OldWeb.today allows users to browse the web using one of several emulated browsers as well as a Flash emulator, all running fully in the browser!
+
+Enter a URL, choose a archival date, and select a browser to start!
+
+Users can either browse the live web, current websites, or connect to web archives / wayback machines and load content directly from the archives.
+
+
 ## Supported Browsers
 
 See the [oldweb.today](https://oldweb.today) for the latest list of browsers. The goal is to support common (Netscape, IE, etc..) as well as other lesser known, but notable browsers in the history of the web.
 
 If you would like to see a browser supported, or would like to contribute a browser, please open an issue!
 
-### Flash and Java
+### Java
 
-Netscape and IE have early versions of Java and Shockwave or Flash installed.
+Most versions of Netscape and IE available in OldWeb.today have early versions of Java installed.
 
-Java (1.0) should work in Netscape 3, and Java 1.1 should work in Netscape 4 (Windows) and IE 5 and IE 6.
+Java 1.0 should work in Netscape 3, and Java 1.1 should work in Netscape 4 (Windows) and IE 5 and IE 6.
+
+### Flash
 
 Netscape and IE also should have the latest supported version of Flash installed. For Mac browsers, this usually means Shockwave 4.
 
 The IE 6 browser has Flash 9, the latest version of Flash that runs on Win98 installed.
+
+### Flash via Ruffle
+
+OldWeb.today also supports the [Ruffle](https://ruffle.rs/) Flash emulator directly, using your native browser.
+
+In this mode, you can browse any live or archived website, with the Ruffle emulator enabled.
 
 
 ## How it Works
@@ -49,6 +64,9 @@ This allows changing the datetime and the home page URL without restarting the e
 
 The network stack (compiled to WASM) is running in a separate web worker. The Basilisk emulator is compiled with Emscripten and also runs in a separate worker.
 A SharedArrayBuffer is needed to communicate between them. The v86 emulator runs in the main thread and communicates via the network worker via BroadcastChannel messaging.
+
+For native mode / Ruffle emulator, no emulated browser is used, but the Ruffle emulator is injected into loaded pages to take over rendering any Flash that may be present
+on the page.
 
 
 ## Deployment

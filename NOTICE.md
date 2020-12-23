@@ -16,7 +16,7 @@ Licensed under the BSD 2-Clause License
 
 Original: https://github.com/copy/v86
 
-Fork: https://github.com/ikreymer/v86
+Fork: https://github.com/oldweb-today/v86
  
 
 - Basilisk II
@@ -30,7 +30,7 @@ Original: https://github.com/cebix/macemu
 
 JS Fork by James Friend: https://github.com/jsdf/macemu
 
-Fork for OldWeb.today: https://github.com/ikreymer/macemu
+Fork for OldWeb.today: https://github.com/oldweb-today/macemu
 
 
 - EaaS-Proxy
@@ -44,4 +44,12 @@ Original: https://gitlab.com/emulation-as-a-service/eaas-proxy
 No specific fork, derived code integrated into the jsnet.js system
 
 
+- Ruffle
 
+Copyright (c) 2018 Mike Welsh <mwelsh@gmail.com>
+
+Licensed under the MIT and Apache licenses.
+
+Original: https://github.com/ruffle-rs/ruffle
+
+No changes made to Ruffle, repackaged for OldWeb.today

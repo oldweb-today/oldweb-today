@@ -9,8 +9,6 @@ html, body {
   box-sizing: border-box;
 }
 
-
-
 .owt-title {
   font-family: cursive;
   font-variant-caps: petite-caps;
@@ -36,10 +34,6 @@ a:visited {
   z-index: 100;
 }
 
-.by-wr {
-  margin-top: 4em;
-}
-
 .err {
   margin: 1em;
   background: snow;
@@ -63,9 +57,6 @@ a:visited {
   margin-top: 1.0rem;
 }
 
-.columns {
-}
-
 .controls {
   height: 100%;
   max-width: 225px;
@@ -79,11 +70,9 @@ a:visited {
 }
 
 .by-wr {
+  margin-top: 1.0rem;
   font-size: 0.75em;
   text-align: center;
-}
-
-.controls .form-group {
 }
 
 oldweb-today {
@@ -101,5 +90,19 @@ owt-v86-browser, owt-bas-browser {
 
 owt-v86-browser {
   background-color: black;
+}
+
+owt-native {
+  margin-top: 1em;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+
+.native-frame {
+  width: 100%;
+  height: 100%;
+  border: 0px;
 }
 

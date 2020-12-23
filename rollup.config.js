@@ -75,13 +75,27 @@ export default [{
       nodeResolve(),
       copy({
         targets: [
-          { src: 'src/bas/BasiliskII.*', dest: 'site/dist/' },
-          { src: 'src/bas/bas-worker.js', dest: 'site/dist/' },
-          { src: 'src/v86/libv86.js', dest: 'site/dist/' },
+          // Shared Config
           { src: 'src/config.json', dest: 'site/assets/',
             transform: (contents) => contents.toString().replace(/\$IMAGE_PREFIX/g, IMAGE_PREFIX)
-          }
+          },
+
+          // Basilisk
+          { src: 'src/bas/BasiliskII.*', dest: 'site/dist/' },
+          { src: 'src/bas/bas-worker.js', dest: 'site/dist/' },
+
+          // V86
+          { src: 'src/v86/libv86.js', dest: 'site/dist/' },
+
+          // Native SW
+          { src: 'src/native/sw.js', dest: 'site/'},
+
+          // Ruffle
+          { src: 'src/native/ruffle/*', dest: 'site/dist'},
         ]
+      }),
+      replace({
+        __ARCHIVE_PREFIX__: JSON.stringify(ARCHIVE_PREFIX)
       }),
       process.env.SERVE === "1" && 
       serve({
@@ -137,13 +151,23 @@ function onServe(server) {
 
   server.on("request", async (request, response) => {
     if (request.url.startsWith("/proxy/")) {
-      const url = request.url.slice("/proxy/".length);
-      const req = new Request(`http://localhost:10001/${url}`, {method: "GET"});
-      const resp = await handleLiveWebProxy(url, req);
-      response.writeHead(resp.status, Object.fromEntries(resp.headers.entries()));
-      const data = new Uint8Array(await resp.arrayBuffer());
-      response.end(data);
+      try {
+        const url = request.url.slice("/proxy/".length);
+        const req = new Request(`http://localhost:10001/${url}`, {method: "GET"});
+        const resp = await handleLiveWebProxy(url, req);
+        response.writeHead(resp.status, Object.fromEntries(resp.headers.entries()));
+        const data = new Uint8Array(await resp.arrayBuffer());
+        response.end(data);
+        return;
+      } catch (err) {
+        response.writeHead(400, {"Content-Type": "text/plain"});
+        response.end("Bad Proxy URL: " + request.url);
+      }
       return;
+
+    } else if (request.url.startsWith("/live/")) {
+      response.writeHead(404, {"Content-Type": "text/plain"});
+      response.end("Not Found");
     }
 
     return listeners[0](request, response);

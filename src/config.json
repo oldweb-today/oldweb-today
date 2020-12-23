@@ -139,5 +139,13 @@
       "clientMAC": [0, 34, 21, 16, 17, 18],
       "clientIP": [10, 0, 2, 100]
     }
+  },
+  {
+    "id": "ruffle",
+    "name": "Ruffle (Flash)",
+    "os": "native",
+    "emu": "native",
+    "icon": "ruffle.png",
+    "opts": {"injectScripts": ["dist/ruffle.js"]}
   }
 ]

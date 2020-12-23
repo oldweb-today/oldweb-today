@@ -2,10 +2,7 @@ import { LitElement, html, css } from 'lit-element';
 
 import OWTV86Browser from './v86/owt-v86';
 import OWTBasBrowser from './bas/owt-bas';
-
-
-
-
+import OWTNative from './native/owt-native';
 
 // ===========================================================================
 class OldWebToday extends LitElement
@@ -33,11 +30,7 @@ class OldWebToday extends LitElement
 
     if (self.BroadcastChannel) {
       this.updateChannel = new BroadcastChannel("update-proxy");
-      this.updateChannel.onmessage = () => {
-        this.showUrlUpdateMessage = false;
-        this.showTsUpdateMessage = false;
-        this.isLoading = false;
-      };
+      this.updateChannel.onmessage = () => this.onClearUpdateNeeded();
     }
 
     this.dlProgress = 0;
@@ -74,6 +67,18 @@ class OldWebToday extends LitElement
 
   get isRunning() {
     return !!this.launchID;
+  }
+
+  onClearUpdateNeeded() {
+    this.showUrlUpdateMessage = false;
+    this.showTsUpdateMessage = false;
+    this.isLoading = false;
+  }
+
+  onStartLoading() {
+    this.showUrlUpdateMessage = false;
+    this.showTsUpdateMessage = false;
+    this.isLoading = true;
   }
 
   firstUpdated() {
@@ -158,10 +163,6 @@ class OldWebToday extends LitElement
   }
 
   renderEmulator() {
-    if (this.unsupported) {
-      return html`<div class="err">Sorry, OldWeb.today can not run in this browser. Please try the latest version of Chrome or Firefox.</div>`;
-    }
-
     if (!this.launchID) {
       return html`<div class="err">Please <b>select a browser</b> from the list to start!</div>`;
     }
@@ -176,13 +177,35 @@ class OldWebToday extends LitElement
       return html`<div class="err">Not a valid browser. Please select a browser.</div>`;
     }
 
+    if (this.unsupported && (emu.emu === "v86" || emu.emu === "bas")) {
+      return html`<div class="err">Sorry, OldWeb.today can not run in this emulator in your current browser. Please try the latest version of Chrome or Firefox to use this emulator.
+      <br/>The Ruffle emulator may still work.</div>`;
+    }
+
     if (emu.emu === "v86") {
       return html`<owt-v86-browser @dl-progress="${this.onDownload}" .opts="${emu.opts}" url="${this.replayUrl}" ts="${this.replayTs}"></owt-v86-browser>`;
     } else if (emu.emu === "bas") {
       return html`<owt-bas-browser @dl-progress="${this.onDownload}" .opts="${emu.opts}" url="${this.replayUrl}" ts="${this.replayTs}"></owt-bas-browser>`;
+    } else if (emu.emu === "native") {
+      return html`<owt-native @dl-progress="${this.onDownload}"
+      @load-started="${this.onStartLoading}"
+      @load-finished="${this.onClearUpdateNeeded}" .opts="${emu.opts}" url="${this.replayUrl}" ts="${this.replayTs}"></owt-native>`;
     } else {
       return html`<div class="err">Unknown emulator type: ${emu.emu}</div>`;
     }
+  }
+
+  renderEmuLabel(emu) {
+    return html`
+    ${emu.os !== 'native' ? html`
+    <img width="24" height="24" src="./assets/icons/${emu.icon}"/>
+    <img style="margin-left: 1.0em" width="24" height="24" src="./assets/icons/${emu.os}.png"/>` : html`
+
+    <img style="margin: 0 18px 0 16px" width="24" height="24" src="./assets/icons/${emu.icon}"/>
+    `}
+
+    <span style="margin-left: 1.5em; vertical-align: super;">${emu.name}</span>
+    `;
   }
 
   render() {
@@ -196,16 +219,12 @@ class OldWebToday extends LitElement
               <h2 class="owt-title">OldWeb.Today</h2>
               <i class="full-width" style="text-align: center; display: block">JS Browser Emulation <img src="./assets/new.gif"/></i>
               <div class="form-group">
-                <label for="browser" class="form-label space-top">Browser:</label>
+                <label for="browser" class="form-label space-top">Browser / Emulator:</label>
 
                 <div class="dropdown full-width">
                   <a class="btn dropdown-toggle" tabindex="0">
                     <span class="curr-browser">
-                      ${currEmu ? html`
-                          <img width="24" height="24" src="./assets/icons/${currEmu.icon}"/>
-                          <img style="margin-left: 0.5em" width="24" height="24" src="./assets/icons/${currEmu.os}.png"/>
-                          <span style="margin-left: 0.5em; vertical-align: super;">${currEmu.name}</span>
-                      `: 'Select a Browser'}</span>
+                      ${currEmu ? this.renderEmuLabel(currEmu): 'Select a Browser'}</span>
                     <i class="icon icon-caret" style="vertical-align: baseline"></i>
                   </a>
                   <ul class="menu" style="width: 234px">
@@ -213,9 +232,7 @@ class OldWebToday extends LitElement
                       ${emu.hidden ? html`` : html`
                       <li class="menu-item" style="">
                         <a style="display: flex" @click="${(e) => this.onSelectBrowser(e, emu)}" tabIndex="${i + 1}">
-                          <img width="24" height="24" src="./assets/icons/${emu.icon}"/>
-                          <img style="margin-left: 1.0em" width="24" height="24" src="./assets/icons/${emu.os}.png"/>
-                          <span style="margin-left: 1.5em; vertical-align: super;">${emu.name}</span>
+                          ${this.renderEmuLabel(emu)}
                         </a>
                       </li>`}
                     `)}
@@ -383,3 +400,4 @@ class OldWebToday extends LitElement
 customElements.define("oldweb-today", OldWebToday);
 customElements.define("owt-v86-browser", OWTV86Browser);
 customElements.define("owt-bas-browser", OWTBasBrowser);
+customElements.define("owt-native", OWTNative);

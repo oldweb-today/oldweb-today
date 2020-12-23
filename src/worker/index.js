@@ -50,6 +50,10 @@ export async function handleRequest(request) {
     return handleFetchCDN(STATIC_PREFIX + requestPath);
   }
 
+  if (requestPath === "/sw.js") {
+    return handleFetchCDN(STATIC_PREFIX + "/dist" + requestPath);
+  }
+
   if (requestPath === "/" || requestPath === "/index.html") {
     return handleIndex();
   }
