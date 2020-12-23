@@ -1,5 +1,6 @@
-# JS OldWeb.today -- JavaScript Browser Emulation
+# OldWeb.today (.js)
 
+## Old Browser + Web Archive Emulation in Your Browser 💫
 [oldweb.today](https://oldweb.today) (OWT) is a system that connects emulated web browsers to web archives, allowing users to browse the old web, today, as it was!
 
 ## Supported Browsers
