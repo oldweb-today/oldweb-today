@@ -160,6 +160,7 @@ function onServe(server) {
         response.end(data);
         return;
       } catch (err) {
+        console.log(err);
         response.writeHead(400, {"Content-Type": "text/plain"});
         response.end("Bad Proxy URL: " + request.url);
       }

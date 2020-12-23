@@ -160,7 +160,15 @@ export async function handleLiveWebProxy(proxyUrl, request) {
 
   headers.set("Access-Control-Expose-Headers", allowHeaders.join(","));
 
-  return new Response(resp.body, {headers, status, statusText});
+  let respBody;
+
+  if (status >= 400 && !resp.headers.get("memento-datetime")) {
+    respBody = `Sorry, this page was not found or could not be loaded: (Error ${status})`;
+  } else {
+    respBody = resp.body;
+  }
+
+  return new Response(respBody, {headers, status, statusText});
 }
 
 // ===========================================================================
@@ -205,6 +213,11 @@ function handleOptions(request) {
 async function fetchWithRedirCheck(url, method, headers, body) {
   let resp = null;
 
+  const noHttps = headers.get("X-OWT-No-HTTPS");
+  if (noHttps) {
+    headers.delete("X-OWT-No-HTTPS");
+  }
+
   while (true) {
     resp = await fetch(url, {
       method,
@@ -235,7 +248,7 @@ async function fetchWithRedirCheck(url, method, headers, body) {
         resp.location = m[1];
       }
 
-      if (location.startsWith("https://")) {
+      if (noHttps && location.startsWith("https://")) {
         url = location;
         continue;
       }

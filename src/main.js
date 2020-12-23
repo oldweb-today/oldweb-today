@@ -69,10 +69,15 @@ class OldWebToday extends LitElement
     return !!this.launchID;
   }
 
-  onClearUpdateNeeded() {
+  onClearUpdateNeeded(event) {
     this.showUrlUpdateMessage = false;
     this.showTsUpdateMessage = false;
     this.isLoading = false;
+
+    if (event && event.detail && event.detail.url) {
+      this._internalUpdate = true;
+      this.replayUrl = event.detail.url;
+    }
   }
 
   onStartLoading() {
@@ -110,8 +115,11 @@ class OldWebToday extends LitElement
       }
 
       if (changedProps.has("replayUrl")) {
-        this.updateChannel.postMessage({replayUrl: this.replayUrl});
-        this.showUrlUpdateMessage = true;
+        if (!this._internalUpdate) {
+          this.updateChannel.postMessage({replayUrl: this.replayUrl});
+          this.showUrlUpdateMessage = true;
+        }
+        this._internalUpdate = false;
       }
     }
 

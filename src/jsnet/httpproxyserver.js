@@ -218,6 +218,6 @@ Location: ${redirect}\r\n\
     //TODO: multi archive support
     const fetchUrl = CORS_PREFIX + (this.replayTs ? ARCHIVE_PREFIX + this.replayTs + "id_/" + targetUrl : targetUrl);
 
-    return fetch(fetchUrl);
+    return fetch(fetchUrl, {headers: {"X-OWT-No-HTTPS": "1"}});
   }
 }

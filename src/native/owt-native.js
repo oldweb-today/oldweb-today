@@ -15,7 +15,8 @@ export default class OWTNative extends LitElement
       url: { type: String },
       ts: { type: String },
       opts: { type: Object },
-      inited: { type: Boolean }
+      inited: { type: Boolean },
+      iframeUrl: { type: String }
     }
   }
 
@@ -25,8 +26,9 @@ export default class OWTNative extends LitElement
 
   updated(changedProps) {
     if (changedProps.has("url") || changedProps.has("ts")) {
-      if (this.url) {
+      if (this.url && (this.url !== this.actualUrl || changedProps.has("ts"))) {
         this.dispatchEvent(new CustomEvent("load-started"));
+        this.iframeUrl = `/wabac/live/${this.ts}mp_/${this.url}`;
       }
     }
   }
@@ -68,18 +70,28 @@ export default class OWTNative extends LitElement
   }
 
   render() {
-    if (!this.inited) {
+    if (!this.inited || !this.iframeUrl) {
       return html``;
     }
 
     return html`
-      <iframe class="native-frame" src="/wabac/live/${this.ts}mp_/${this.url}"
+      <iframe class="native-frame" src="${this.iframeUrl}"
       @load="${this.onFrameLoad}" allow="autoplay 'self'; fullscreen" allowfullscreen
       ></iframe> 
     `;
   }
 
-  onFrameLoad() {
-    this.dispatchEvent(new CustomEvent("load-finished"));
+  onFrameLoad(event) {
+    const detail = {};
+
+    try {
+      //const iframe = this.renderRoot.querySelector("iframe");
+      detail.url = event.currentTarget.contentWindow.WB_wombat_location.href;
+      this.actualUrl = detail.url;
+    } catch(e) {
+      console.log(e);
+    }
+
+    this.dispatchEvent(new CustomEvent("load-finished", {detail}));
   }
 }
