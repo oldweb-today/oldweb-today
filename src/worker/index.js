@@ -11,11 +11,14 @@ const cfOpts = {
 
 const INDEX_HTML = __INDEX_HTML__;
 
+const CORS_ALLOWED_ORIGINS = __CORS_ALLOWED_ORIGINS__;
+
 const CLASSIC_ORIGIN = "http://classic.oldweb.today";
 
 
 // ===========================================================================
 try {
+  // Not available when running locally
   addEventListener('fetch', event => {
     event.respondWith(handleRequest(event.request))
   })
@@ -66,6 +69,9 @@ async function handleFetchCDN(url) {
   headers.set("Cross-Origin-Embedder-Policy", "require-corp");
   if (url.endsWith(".js")) {
     headers.set("Content-Type", "application/javascript");
+  }
+  if (url.endsWith(".css")) {
+    headers.set("Content-Type", "text/css");
   }
   return new Response(resp.body, {headers});
 }
@@ -155,21 +161,28 @@ export async function handleLiveWebProxy(proxyUrl, request) {
 
 // ===========================================================================
 function handleOptions(request) {
-  // Make sure the necesssary headers are present
+
+  const origin = request.headers.get('Origin');
+  const method = request.headers.get('Access-Control-Request-Method');
+  const headers = request.headers.get('Access-Control-Request-Headers');
+
+  if (CORS_ALLOWED_ORIGINS && !CORS_ALLOWED_ORIGINS.includes(origin)) {
+    return notFound("origin not allowed", 403);
+  }
+
+  // Make sure the necessary headers are present
   // for this to be a valid pre-flight request
-  if (
-    request.headers.get('Origin') !== null &&
-    request.headers.get('Access-Control-Request-Method') !== null &&
-    request.headers.get('Access-Control-Request-Headers') !== null
-  ) {
+  if (origin !== null &&
+      method !== null && 
+      headers !== null) {
     // Handle CORS pre-flight request.
     // If you want to check the requested method + headers
     // you can do that here.
     return new Response(null, {
       headers: {
-        "Access-Control-Allow-Method": request.headers.get('Access-Control-Request-Method'),
-        "Access-Control-Allow-Headers": request.headers.get('Access-Control-Request-Headers'),
-        "Access-Control-Allow-Origin": request.headers.get("Origin"),
+        "Access-Control-Allow-Method": method,
+        "Access-Control-Allow-Headers": headers,
+        "Access-Control-Allow-Origin": origin,
         "Access-Control-Allow-Credentials": "true"
       }
     });
@@ -231,8 +244,8 @@ async function fetchWithRedirCheck(url, method, headers, body) {
 }
 
 // ===========================================================================
-function notFound(err = "not found") {
-  return new Response(JSON.stringify({"error": err}), {status: 404, headers: {"Content-Type": "application/json"}});
+function notFound(err = "not found", status = 404) {
+  return new Response(JSON.stringify({"error": err}), {status, headers: {"Content-Type": "application/json"}});
 }
 
 // ===========================================================================

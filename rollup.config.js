@@ -20,6 +20,12 @@ const IMAGE_PREFIX = CDN_PREFIX + "/images";
 const CORS_PREFIX = "/proxy/";
 
 
+// origins allowed to connect to cors proxy
+// set to '[]' to allow all
+// only used if connecting to cors proxy from a different deployment
+const CORS_ALLOWED_ORIGINS = ["https://oldweb.today", "https://js.oldweb.today"]; 
+
+
 // path to web archive / wayback machine
 // TODO: support multiple archives
 const ARCHIVE_PREFIX = "https://web.archive.org/web/";
@@ -108,6 +114,7 @@ export default [{
     plugins: [
       replace({
         __CDN_PREFIX__: JSON.stringify(CDN_PREFIX),
+        __CORS_ALLOWED_ORIGINS__: JSON.stringify(CORS_ALLOWED_ORIGINS),
         __INDEX_HTML__: JSON.stringify(INDEX_HTML)
       })
     ]

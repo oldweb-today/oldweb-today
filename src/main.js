@@ -163,7 +163,7 @@ class OldWebToday extends LitElement
     }
 
     if (!this.launchID) {
-      return html`<div class="err">Please select a browser from the list.</div>`;
+      return html`<div class="err">Please <b>select a browser</b> from the list to start!</div>`;
     }
 
     if (!this.emuOptions.length) {
