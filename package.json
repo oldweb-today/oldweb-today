@@ -1,11 +1,13 @@
 {
   "name": "oldwebtoday.js",
   "main": "src/main.js",
+  "description": "Run old emulated browsers in your browser, connected to web archives or live web",
+  "author": "Webrecorder Software",
   "sideEffects": [
     "./src/main.js"
   ],
   "version": "1.0.0",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@rollup/plugin-node-resolve": "^10.0.0",
     "lit-element": "^2.4.0",
@@ -16,11 +18,12 @@
   "scripts": {
     "build": "rollup -c",
     "build-dev": "NODE_ENV=development rollup -c",
-    "start-dev": "NODE_ENV=development SERVE=1 rollup -c",
+    "start-dev": "NODE_ENV=development rollup -c && NODE_ENV=development SERVE=1 rollup -c",
     "publish": "rollup -c; cd worker-site; wrangler publish"
   },
   "devDependencies": {
     "@rollup/plugin-replace": "^2.3.4",
+    "node-fetch": "^2.6.1",
     "rollup": "^2.34.0",
     "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-livereload": "^2.0.0",

@@ -1,9 +1,8 @@
 
 const encoder = new TextEncoder();
 
-//const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
-
-const CORS_PROXY  = "/proxy/";
+const CORS_PREFIX  = __CORS_PREFIX__;
+const ARCHIVE_PREFIX = __ARCHIVE_PREFIX__;
 
 
 export default class HttpProxyServer
@@ -217,7 +216,7 @@ Location: ${redirect}\r\n\
 
   doProxy(targetUrl) {
     //TODO: multi archive support
-    const fetchUrl = CORS_PROXY + (this.replayTs ? `https://web.archive.org/web/${this.replayTs}id_/${targetUrl}` : targetUrl);
+    const fetchUrl = CORS_PREFIX + (this.replayTs ? ARCHIVE_PREFIX + this.replayTs + "id_/" + targetUrl : targetUrl);
 
     return fetch(fetchUrl);
   }

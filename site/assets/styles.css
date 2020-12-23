@@ -2,7 +2,14 @@ html, body {
   width: 100%;
   height: 100%;
   background-color: lightgrey;
+  box-sizing: border-box;
 }
+
+*, ::before, ::after {
+  box-sizing: border-box;
+}
+
+
 
 .owt-title {
   font-family: cursive;
@@ -25,8 +32,15 @@ html, body {
   z-index: 100;
 }
 
+.by-wr {
+  margin-top: 4em;
+}
+
 .err {
-  margin: 2em;
+  margin: 1em;
+  background: snow;
+  border: 1px solid black;
+  padding: 1em
 }
 
 .flex-form {
@@ -45,13 +59,27 @@ html, body {
   margin-top: 1.0rem;
 }
 
+.columns {
+}
+
 .controls {
   height: 100%;
   max-width: 225px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.logo {
+  max-width: 150px;
+}
+
+.by-wr {
+  font-size: 0.75em;
+  text-align: center;
 }
 
 .controls .form-group {
-  margin-bottom: 1em;
 }
 
 oldweb-today {
@@ -60,8 +88,8 @@ oldweb-today {
   height: 100%;
 }
 
-
-owt-v86-browser {
+owt-v86-browser, owt-bas-browser {
+  margin-top: 1em;
   background-color: black;
   display: flex;
   width: 1024px;

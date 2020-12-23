@@ -1,46 +1,46 @@
 const STATIC_PREFIX = __CDN_PREFIX__;
 
-const TS_URL = /[\d]+id_\/(http:.*)/;
+const TS_URL = /[\d]+id_\/(https?:.*)/;
+
+const BR_TS_URL = /[\w]+\/[\d]+\//;
 
 const cfOpts = {
   scrapeShield: false,
   cacheTtlByStatus: { "200-299": 3600, 404: 1, "500-599": 0 }
 }
 
+const INDEX_HTML = __INDEX_HTML__;
+
+const CLASSIC_ORIGIN = "http://classic.oldweb.today";
+
 
 // ===========================================================================
-addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request))
-})
+try {
+  addEventListener('fetch', event => {
+    event.respondWith(handleRequest(event.request))
+  })
+} catch(e) {
 
-// ===========================================================================
-function notFound(err = "not found") {
-  return new Response(JSON.stringify({"error": err}), {status: 404, headers: {"Content-Type": "application/json"}});
 }
 
 // ===========================================================================
-async function handleRequest(request) {
+export async function handleRequest(request) {
   const requestURL = new URL(request.url);
-  const requestPath = requestURL.pathname;
 
-  //console.log(requestPath);
+  if (requestURL.protocol === "http:" && requestURL.hostname !== "localhost") {
+    requestURL.protocol = "https:";
+    return Response.redirect(requestURL.href, 301);
+  }
+  const requestPath = requestURL.pathname;
 
   if (request.method === "OPTIONS") {
     return handleOptions(request);
   }
 
-  if (requestPath.startsWith("/echo/")) {
-    const data = {"echo": {
-        "method": request.method,
-        "url": request.url,
-        "headers": Object.fromEntries(request.headers.entries())
-    }};
-
-    return new Response(JSON.stringify(data), { headers: { 'content-type': 'application/json' }});
-  }
-
   if (requestPath.startsWith("/proxy/")) {
-    return handleLiveWebProxy(request);
+    let pathWithQuery = request.url.split(request.headers.get("host"), 2)[1];
+    pathWithQuery = requestPath.slice("/proxy/".length);
+    return handleLiveWebProxy(pathWithQuery, request);
   }
 
   if (requestPath.startsWith("/dist/") || requestPath.startsWith("/assets/")) {
@@ -50,6 +50,12 @@ async function handleRequest(request) {
   if (requestPath === "/" || requestPath === "/index.html") {
     return handleIndex();
   }
+
+  if (requestPath.match(BR_TS_URL)) {
+    return redirectToClassic(requestPath);
+  }
+
+  return notFound();
 }
 
 // ===========================================================================
@@ -66,24 +72,7 @@ async function handleFetchCDN(url) {
 
 // ===========================================================================
 function handleIndex() {
-  const text = `
-<!doctype html>
-<html>
-  <head>
-    <link rel="stylesheet" href="assets/spectre.min.css">
-    <link rel="stylesheet" href="assets/spectre-exp.min.css">
-    <link rel="stylesheet" href="assets/spectre-icons.min.css">
-    <link rel="stylesheet" href="assets/styles.css">
-    <script src="dist/jsnet-client.js"></script>
-    <script src="dist/main.js"></script>
-  </head>
-  <body>
-    <oldweb-today></oldweb-today>
-  </body>
-</html>
-  `;
-
-  return new Response(text, {headers: {
+  return new Response(INDEX_HTML, {headers: {
     "Content-Type": "text/html",
     "Cross-Origin-Opener-Policy": "same-origin",
     "Cross-Origin-Embedder-Policy": "require-corp"
@@ -91,11 +80,7 @@ function handleIndex() {
 }
 
 // ===========================================================================
-async function handleLiveWebProxy(request) {
-  const requestPath = request.url.split(request.headers.get("host"), 2)[1];
-
-  let proxyUrl = requestPath.slice("/proxy/".length);
-
+export async function handleLiveWebProxy(proxyUrl, request) {
   if (proxyUrl.startsWith("//")) {
     proxyUrl = "https:" + proxyUrl;
   }
@@ -160,6 +145,9 @@ async function handleLiveWebProxy(request) {
     allowHeaders.push(header);
   }
 
+  //headers.delete("content-encoding");
+  //headers.delete("transfer-encoding");
+
   headers.set("Access-Control-Expose-Headers", allowHeaders.join(","));
 
   return new Response(resp.body, {headers, status, statusText});
@@ -205,8 +193,13 @@ async function fetchWithRedirCheck(url, method, headers, body) {
       method,
       headers,
       body,
+      // for cf worker
       redirect: 'manual',
-      cf: cfOpts
+      cf: cfOpts,
+
+      // for node fetch
+      follow: 0,
+      compress: false
     });
 
     if (resp.status > 300 && resp.status < 400) {
@@ -235,4 +228,14 @@ async function fetchWithRedirCheck(url, method, headers, body) {
   }
 
   return resp;
+}
+
+// ===========================================================================
+function notFound(err = "not found") {
+  return new Response(JSON.stringify({"error": err}), {status: 404, headers: {"Content-Type": "application/json"}});
+}
+
+// ===========================================================================
+function redirectToClassic(path) {
+  return Response.redirect(CLASSIC_ORIGIN + path, 301);
 }
