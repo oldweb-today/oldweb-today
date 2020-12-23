@@ -1,11 +1,10 @@
 # JS OldWeb.today -- JavaScript Browser Emulation
 
-[oldweb.today](https://oldweb.today) is a system that connects emulated web browsers to web archives, allowing users to browse the old web, today, as it was!
+[oldweb.today](https://oldweb.today) (OWT) is a system that connects emulated web browsers to web archives, allowing users to browse the old web, today, as it was!
 
 ## Supported Browsers
 
-See the [oldweb.today](https://oldweb.today) for the latest list of browsers. The goal is to support Netscape, IE as well as other lesser known, but notable browsers
-in the history of the web.
+See the [oldweb.today](https://oldweb.today) for the latest list of browsers. The goal is to support common (Netscape, IE, etc..) as well as other lesser known, but notable browsers in the history of the web.
 
 If you would like to see a browser supported, or would like to contribute a browser, please open an issue!
 
@@ -26,13 +25,13 @@ This current version runs entirely in JavaScript, using emulators to run Windows
 
 The version of OldWeb.today works by building on and combining a number of great tools created by others, including:
 
-- [V86 Emulator](https://github.com/copy/v86), a Javascript x86 emulator by [Fabian](https://github.com/copy) is used to run Windows
-- [Basilisk II JS Port](https://github.com/jsdf/macemu), a Javascript port of the Basilisk II emulator by [James Friend](https://jamesfriend.com.au/) is to run MacOS
+- [V86 Emulator](https://github.com/copy/v86), a JavaScript x86 emulator by [Fabian](https://github.com/copy) is used to run Windows
+- [Basilisk II JS Port](https://github.com/jsdf/macemu), a JavaScript port of the Basilisk II emulator by [James Friend](https://jamesfriend.com.au/) is to run MacOS
 
-Each of these emulators were modified to support a custom Javascript network stack using picotcp created by [Emulation as a Service](https://gitlab.com/emulation-as-a-service) developer Rafael Gieshke:
+Each of these emulators were modified ([here](https://github.com/oldweb-today/macemu) and [here](https://github.com/oldweb-today/v86)) to support a custom JavaScript network stack using picotcp created by [Emulation as a Service](https://gitlab.com/emulation-as-a-service) developers Rafael Gieshke and Klaus Rechert:
 
 - [picotcp.js](https://gitlab.com/emulation-as-a-service/picotcp.js) - A WebAssembly build of [picotcp](https://github.com/tass-belgium/picotcp)
-- [webnetwork.js](https://gitlab.com/emulation-as-a-service/eaas-proxy/-/blob/master/webnetwork.js) - application of picotcp.js to run a web server in Javascript.
+- [webnetwork.js](https://gitlab.com/emulation-as-a-service/eaas-proxy/-/blob/master/webnetwork.js) - application of picotcp.js to run a web server in JavaScript.
 
 This system was further modified and integrated into OldWeb.today to connect to terminate HTTP connections from emulated browsers and respond with HTTP data from a regular `fetch()` request, either to live web or an archive source. Currently, only GET requests are supported and only standard Content-Length and Content-Type headers are proxied back.
 
@@ -53,36 +52,10 @@ OldWeb.today requires Node and a package manager npm/yarn to build and modify.
 To run locally, first install with `yarn install`
 
 
-### Static Deployment (Default Live Web Proxy)
-
-The site can be deployed locally simply by running an http server in the `./site` directory, for example, `http-server -p 10001`.
-
-However, this will not include a CORS proxy, which is needed for loading from live web or a remote archive.
-
-One option is to run with the publicly available [CORS Anywhere](https://cors-anywhere.herokuapp.com/) proxy for connecting to live web and remote archives.
-
-As this proxy is rate limited, this option is not recommended except for brief testing.
-
-To use this proxy:
-
-1. In `rollup.config.js` uncomment:
-
-  ```js
-  // CORS_PREFIX = "/proxy/";
-
-  const CORS_PREFIX = "http://cors-anywhere.herokuapp.com/";
-  ```
-
-2. Then, run `yarn run build`
-
-3. OldWeb.today can now be served from `./site/` from any static HTTP server.
-
-*Note: This will also work if setting `ARCHIVE_PREFIX` to a local archive, in which case the `CORS_PREFIX` can be empty, as shown below.*
-
-
 ### Local Deployment (Local Live Web Proxy)
 
-This option is similar to the previous, but runs a local CORS proxy.
+The recommended deployment option for development is to run a dev server with a local CORS proxy.
+This can be done simply by running the rollup dev server with:
 
 
 ```shell
@@ -93,7 +66,7 @@ yarn run start-dev
 This will start a local web server (via rollup) and you should be able to access OldWeb.today via
 `http://localhost:10001/`. The local proxy will be running at `http://localhost:10001/proxy/`
 
-### Production Deployment
+### Production Deployment -- Cloudflare
 
 For production, the recommended deployment is to run using [Cloudflare Workers](https://workers.cloudflare.com/), which handles
 the live web proxy. The free service should be sufficient for most use cases.
@@ -105,6 +78,34 @@ To use this option:
 3. Run `yarn run publish` to publish to your Cloudflare Worker endpoint.
 4. Load OldWeb.Today from your Cloudflare URL!
 
+### Production Deployment -- Static Site with Local Archive
+
+An even simpler deployment, OldWeb.today can be deployed fully as a static site, by serving the content in the `./site` directory
+over an HTTP server.
+
+However, this option will not include a CORS proxy, which is needed for loading from live web or a remote archive.
+
+One option is to run with the publicly available [CORS Anywhere](https://cors-anywhere.herokuapp.com/) proxy for connecting to live web and remote archives.
+
+As this proxy is rate limited, this option is not recommended for production deployment.
+
+This deployment makes sense if also running a local web archive on the same host (and live web access is not needed), removing the need for a CORS proxy.
+
+To use this method:
+
+1. In `rollup.config.js`, modify the `CORS_PREFIX` and/or the `ARCHIVE_PREFIX` to point to a local archive, for example (see below for more details):
+
+  ```js
+  const CORS_PREFIX = "";
+  
+  const ARCHIVE_PREFIX = "/wayback/";
+  ```
+
+2. Run `yarn run build`
+
+3. OldWeb.today can now be served from `./site/` from any static HTTP server.
+
+
 #### Customizing Assets Path
 
 Note that when running on Cloudflare, the static assets in `site/assets` and built scripts `site/dist` are served from a separate CDN (via DigitalOcean).
@@ -114,13 +115,13 @@ This path can be changed by rebuilding after changing `CDN_PREFIX` in `rollup.co
 The assets and scripts can be hosted on any static web storage.
 
 
-### Customiztions
+### Customizations
 
 The loading paths below can be changed by changing the settings in `rollup.config.js` and rerunning `yarn run build`.
 
 #### Changing the Archive Source
 
-Currently, OldWeb.today supports loading from Internet Archive's Wayback Machine and directly from the live web.
+Currently, OldWeb.today supports loading from [Internet Archive's Wayback Machine](https://web.archive.org/web/) and directly from the live web.
 Support for additional / multiple archives is planned!
 
 The archive source can be any web archive that supports Wayback Machine style unrewritten urls, eg: `<prefix>/<timestamp>id_/<url>`.
@@ -147,7 +148,7 @@ ARCHIVE_PREFIX = "https://mywebarchive.example.com/wayback/"
 
 ### Changing Image and Asset Paths
 
-All Emulator Images are hosted from the DigitalOcean Bucket. If you wish to run with a local/different set of images, you can set:
+All Emulator Images are hosted from a static block storage bucket (currently on DigitalOcean). If you wish to run with a local/different set of images, you can set:
 
 ```js
 IMAGE_PREFIX = "https://mybucket.example.com/images`
