@@ -224,7 +224,7 @@ function startEmulator(parentConfig) {
   const rewriteFiles = {};
 
   rewriteFiles[opts.imagePath + 'prefs'] = (data) => {
-    data = new TextDecoder().decode(data).replace("$DISK", pathGetFilename(parentConfig.config.opts.imageUrl));
+    data = new TextDecoder().decode(data).replace("$DISK", pathGetFilename(opts.imageUrl));
     return new TextEncoder().encode(data);
   }
 

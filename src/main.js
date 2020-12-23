@@ -285,7 +285,7 @@ class OldWebToday extends LitElement
             </div>
             <div class="by-wr">
               <p>
-                <a href="https://github.com/webrecorder/oldweb-today.js" target="_blank">How it Works / View Source</a>
+                <a href="https://github.com/oldweb-today/oldweb-today" target="_blank">How it Works / View Source</a>
               </p>
               <p>
                 <a href="http://classic.oldweb.today/" target="_blank">Classic OldWeb.today</a>

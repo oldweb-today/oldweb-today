@@ -79,7 +79,7 @@ export default [{
           { src: 'src/bas/bas-worker.js', dest: 'site/dist/' },
           { src: 'src/v86/libv86.js', dest: 'site/dist/' },
           { src: 'src/config.json', dest: 'site/assets/',
-            transform: (contents) => contents.toString().replace(/\$IMGPATH/g, IMAGE_PREFIX)
+            transform: (contents) => contents.toString().replace(/\$IMAGE_PREFIX/g, IMAGE_PREFIX)
           }
         ]
       }),

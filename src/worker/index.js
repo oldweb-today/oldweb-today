@@ -42,11 +42,11 @@ export async function handleRequest(request) {
 
   if (requestPath.startsWith("/proxy/")) {
     let pathWithQuery = request.url.split(request.headers.get("host"), 2)[1];
-    pathWithQuery = requestPath.slice("/proxy/".length);
+    pathWithQuery = pathWithQuery.slice("/proxy/".length);
     return handleLiveWebProxy(pathWithQuery, request);
   }
 
-  if (requestPath.startsWith("/dist/") || requestPath.startsWith("/assets/")) {
+  if (requestPath.startsWith("/dist/") || requestPath.startsWith("/assets/") || requestPath.startsWith("/images/")) {
     return handleFetchCDN(STATIC_PREFIX + requestPath);
   }
 

@@ -1,7 +1,12 @@
-# OldWeb.today (.js)
+# OldWeb.today (in JS)
 
 ## Old Browser + Web Archive Emulation in Your Browser 💫
 [oldweb.today](https://oldweb.today) (OWT) is a system that connects emulated web browsers to web archives, allowing users to browse the old web, today, as it was!
+
+![Screenshot of Netscape 3](extra/screenshot.png)
+
+(Screenshot of: [https://oldweb.today/?browser=ns3-mac#19960101/http://geocities.com/](https://oldweb.today/?browser=ns3-mac#19960101/http://geocities.com/))
+
 
 ## Supported Browsers
 

@@ -19,6 +19,10 @@ html, body {
   margin-bottom: 0px;
 }
 
+a:visited {
+  color: #5755d9;
+}
+
 .curr-browser {
   font-size: smaller;
   vertical-align: middle;
@@ -90,9 +94,12 @@ oldweb-today {
 
 owt-v86-browser, owt-bas-browser {
   margin-top: 1em;
-  background-color: black;
   display: flex;
   width: 1024px;
   height: 768px;
+}
+
+owt-v86-browser {
+  background-color: black;
 }
 
