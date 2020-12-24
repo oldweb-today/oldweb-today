@@ -236,7 +236,7 @@ class OldWebToday extends LitElement
                       ${currEmu ? this.renderEmuLabel(currEmu): 'Select a Browser'}</span>
                     <i class="icon icon-caret" style="vertical-align: baseline"></i>
                   </a>
-                  <ul class="menu" style="width: 234px">
+                  <ul id="browser-menu" class="menu">
                     ${this.emuOptions.map((emu, i) => html`
                       ${emu.hidden ? html`` : html`
                       <li class="menu-item" style="">

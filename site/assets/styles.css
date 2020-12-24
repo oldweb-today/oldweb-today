@@ -40,6 +40,11 @@ a:visited {
   z-index: 100;
 }
 
+#browser-menu {
+  width: 234px;
+  max-height: unset;
+}
+
 .err {
   margin: 1em;
   background: snow;
