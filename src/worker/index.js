@@ -29,21 +29,24 @@ try {
 // ===========================================================================
 export async function handleRequest(request) {
   const requestURL = new URL(request.url);
+  const requestPath = requestURL.pathname;
+
+  if (requestPath.match(BR_TS_URL)) {
+    const pathWithQuery = request.url.split(request.headers.get("host"), 2)[1];
+    return redirectToClassic(pathWithQuery);
+  }
 
   if (requestURL.protocol === "http:" && requestURL.hostname !== "localhost") {
-    requestURL.protocol = "https:";
-    return Response.redirect(requestURL.href, 301);
+    return Response.redirect("https:" + request.url.slice("http:".length), 301);
   }
-  const requestPath = requestURL.pathname;
 
   if (request.method === "OPTIONS") {
     return handleOptions(request);
   }
 
   if (requestPath.startsWith("/proxy/")) {
-    let pathWithQuery = request.url.split(request.headers.get("host"), 2)[1];
-    pathWithQuery = pathWithQuery.slice("/proxy/".length);
-    return handleLiveWebProxy(pathWithQuery, request);
+    const pathWithQuery = request.url.split(request.headers.get("host"), 2)[1];
+    return handleLiveWebProxy(pathWithQuery.slice("/proxy/".length), request);
   }
 
   if (requestPath.startsWith("/dist/") || requestPath.startsWith("/assets/") || requestPath.startsWith("/images/")) {
@@ -56,10 +59,6 @@ export async function handleRequest(request) {
 
   if (requestPath === "/" || requestPath === "/index.html") {
     return handleIndex();
-  }
-
-  if (requestPath.match(BR_TS_URL)) {
-    return redirectToClassic(requestPath);
   }
 
   return notFound();
@@ -267,5 +266,8 @@ function notFound(err = "not found", status = 404) {
 
 // ===========================================================================
 function redirectToClassic(path) {
-  return Response.redirect(CLASSIC_ORIGIN + path, 301);
+  // can't use Response.reedirect due to slash merging, eg. "http://" -> "http:/"
+  //return Response.redirect(CLASSIC_ORIGIN + path, 301);
+  return new Response("Redirect to classic", {status: 301, headers: {"Location": CLASSIC_ORIGIN + path}});
 }
+
