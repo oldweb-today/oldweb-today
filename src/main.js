@@ -209,7 +209,8 @@ class OldWebToday extends LitElement
     <img width="24" height="24" src="./assets/icons/${emu.icon}"/>
     <img style="margin-left: 1.0em" width="24" height="24" src="./assets/icons/${emu.os}.png"/>` : html`
 
-    <img style="margin: 0 18px 0 16px" width="24" height="24" src="./assets/icons/${emu.icon}"/>
+    <span class="icon-fill"></span>
+    <img width="24" height="24" src="./assets/icons/${emu.icon}"/>
     `}
 
     <span style="margin-left: 1.5em; vertical-align: super;">${emu.name}</span>
@@ -249,7 +250,7 @@ class OldWebToday extends LitElement
 
                 <form @submit="${this.onUrlUpdate}" class="space-top">
                   <label class="form-label" for="url">URL:</label>
-                  <input class="form-input" type="url" id="url" .value="${this.replayUrl}" placeholder="http://example.com/"></input>
+                  <input @change="${this.onUrlUpdate}" class="form-input" type="url" id="url" .value="${this.replayUrl}" placeholder="http://example.com/"></input>
                 </form>
 
                 ${this.showUrlUpdateMessage ? html`
@@ -272,7 +273,7 @@ class OldWebToday extends LitElement
 
                 ${!!this.replayTs ? html`
                 <details>
-                  <summary>Available Archives</summary>
+                  <summary>Web Archive Sources</summary>
                   <div>
                   <label class="form-checkbox">
                     <input type="checkbox" disabled checked>

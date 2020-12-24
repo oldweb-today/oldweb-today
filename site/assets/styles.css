@@ -17,6 +17,12 @@ html, body {
   margin-bottom: 0px;
 }
 
+.icon-fill {
+  width: 24px;
+  height: 24px;
+  margin-right: 1.0em;
+}
+
 a:visited {
   color: #5755d9;
 }
@@ -82,13 +88,17 @@ oldweb-today {
 }
 
 owt-v86-browser, owt-bas-browser {
-  margin-top: 1em;
-  display: flex;
   width: 1024px;
   height: 768px;
 }
 
+owt-bas-browser canvas {
+  margin-top: 1em;
+}
+
 owt-v86-browser {
+  margin-top: 1em;
+  display: flex;
   background-color: black;
 }
 

@@ -416,7 +416,7 @@ function startEmulator(parentConfig) {
       var xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
       xhr.responseType = 'arraybuffer';
-      if (url.endsWith(".img")) {
+      if (url.endsWith(".img") || url.endsWith(".img.gz")) {
         xhr.onprogress = function(event) {
           const data = {count: event.loaded, total: event.total};
           self.postMessage(data);

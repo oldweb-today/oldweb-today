@@ -42,6 +42,9 @@ export default class OWTNative extends LitElement
       this.inited = true;
     });
 
+    const baseUrl = new URL(window.location);
+    baseUrl.hash = "";
+
     const msg = {
       msg_type: "addColl",
       name: "live",
@@ -52,7 +55,9 @@ export default class OWTNative extends LitElement
         "prefix": "/proxy/", 
         "isLive": false,
         "archivePrefix": ARCHIVE_PREFIX,
-        "injectScripts": this.opts.injectScripts
+        "injectScripts": this.opts.injectScripts,
+        "baseUrl": baseUrl.href,
+        "baseUrlHashReplay": true
       },
     };
 
