@@ -6,7 +6,7 @@ const BR_TS_URL = /[\w]+\/[\d]+\//;
 
 const cfOpts = {
   scrapeShield: false,
-  cacheTtlByStatus: { "200-299": 3600, 404: 1, "500-599": 0 }
+  cacheTtlByStatus: { "200-299": 3600, 404: 1, "500-599": 0, "300-399": 10 }
 }
 
 const INDEX_HTML = __INDEX_HTML__;
@@ -31,15 +31,6 @@ export async function handleRequest(request) {
   const requestURL = new URL(request.url);
   const requestPath = requestURL.pathname;
 
-  if (requestPath.match(BR_TS_URL)) {
-    const pathWithQuery = request.url.split(request.headers.get("host"), 2)[1];
-    return redirectToClassic(pathWithQuery);
-  }
-
-  if (requestURL.protocol === "http:" && requestURL.hostname !== "localhost") {
-    return Response.redirect("https:" + request.url.slice("http:".length), 301);
-  }
-
   if (request.method === "OPTIONS") {
     return handleOptions(request);
   }
@@ -47,6 +38,15 @@ export async function handleRequest(request) {
   if (requestPath.startsWith("/proxy/")) {
     const pathWithQuery = request.url.split(request.headers.get("host"), 2)[1];
     return handleLiveWebProxy(pathWithQuery.slice("/proxy/".length), request);
+  }
+
+  if (requestPath.match(BR_TS_URL)) {
+    const pathWithQuery = request.url.split(request.headers.get("host"), 2)[1];
+    return redirectToClassic(pathWithQuery);
+  }
+
+  if (requestURL.protocol === "http:" && requestURL.hostname !== "localhost") {
+    return Response.redirect("https:" + request.url.slice("http:".length), 301);
   }
 
   if (requestPath.startsWith("/dist/") || requestPath.startsWith("/assets/") || requestPath.startsWith("/images/")) {
