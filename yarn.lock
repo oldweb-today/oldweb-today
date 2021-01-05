@@ -387,6 +387,11 @@ micromatch@^4.0.2:
     braces "^3.0.1"
     picomatch "^2.0.5"
 
+mime@>=2.0.3:
+  version "2.4.7"
+  resolved "https://registry.yarnpkg.com/mime/-/mime-2.4.7.tgz#962aed9be0ed19c91fd7dc2ece5d7f4e89a90d74"
+  integrity sha512-dhNd1uA2u397uQk3Nv5LM4lm93WYDUXFn3Fu291FJerns4jyTudqhIWe4W04YLy7Uk1tm1Ore04NpjRvQp/NPA==
+
 mime@>=2.4.6:
   version "2.4.6"
   resolved "https://registry.yarnpkg.com/mime/-/mime-2.4.6.tgz#e5b407c90db442f2beb5b162373d07b69affa4d1"
@@ -483,6 +488,14 @@ rollup-plugin-livereload@^2.0.0:
   integrity sha512-oC/8NqumGYuphkqrfszOHUUIwzKsaHBICw6QRwT5uD07gvePTS+HW+GFwu6f9K8W02CUuTvtIM9AWJrbj4wE1A==
   dependencies:
     livereload "^0.9.1"
+
+rollup-plugin-serve-range@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-serve-range/-/rollup-plugin-serve-range-1.0.1.tgz#bbf5b28f1196f5c34c426204ad04266d80efe743"
+  integrity sha512-OpPMS7Ycp+JQo4OP0EyOo4q0hVph046+UZgsW7ZpugSa4CaxmRun2LfJS9endX/rTvIM35CasX94i/oidWYuuA==
+  dependencies:
+    mime ">=2.0.3"
+    opener "1"
 
 rollup-plugin-serve@^1.1.0:
   version "1.1.0"

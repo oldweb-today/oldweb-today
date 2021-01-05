@@ -15,6 +15,7 @@ html, body {
   word-break: break-word;
   margin-top: 0.25em;
   margin-bottom: 0px;
+  text-align: center;
 }
 
 .icon-fill {
@@ -31,6 +32,27 @@ a:visited {
   font-size: smaller;
   vertical-align: middle;
   font-weight: bold;
+  display: flex;
+}
+
+.curr-browser .browser-label {
+  min-width: auto;
+  width: auto;
+  margin-right: 1.0em;
+}
+
+.curr-browser .browser-features {
+  flex-direction: row;
+}
+
+.curr-browser .browser-features span:not(:last-child):after {
+  content: ",";
+  margin-right: 0.5em;
+}
+
+.caret {
+  margin-top: 0.5em;
+  vertical-align: baseline;
 }
 
 #emu {
@@ -41,8 +63,23 @@ a:visited {
 }
 
 #browser-menu {
-  width: 234px;
   max-height: unset;
+}
+
+.browser-label {
+  margin-left: 1.5em;
+  vertical-align: super;
+  min-width: 120px;
+  width: 120px;
+}
+
+.browser-features {
+  font-size: 12px;
+  margin-right: 0.5em;
+  min-width: 80px;
+  font-variant-caps: all-small-caps;
+  display: flex;
+  flex-direction: column;
 }
 
 .err {
@@ -70,10 +107,32 @@ a:visited {
 
 .controls {
   height: 100%;
-  max-width: 225px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+@media (min-width: 1250px) {
+  .controls {
+    max-width: 225px;
+  }
+
+  .curr-browser .browser-features {
+    display: none;
+  }
+
+  .curr-browser .browser-features span:not(:last-child):after {
+    content: "";
+    margin-right: 0;
+  }
+
+  .btn.dropdown-toggle {
+    display: inline-block;
+  }
+
+  .curr-browser {
+    display: inline-block;
+  }
 }
 
 .logo {

@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 
-const usePoll = false;
+const usePoll = true;
 let preload = false;
 
 const DEFAULT_MAC = [0x00, 0x22, 0x15, 0x10, 0x11, 0x12];
@@ -12,6 +12,8 @@ export default class OWTV86Browser extends LitElement
   constructor() {
     super();
     this.lib86Url = "dist/libv86.js";
+
+    this.emulator = null;
   }
 
   createRenderRoot() {
@@ -56,18 +58,21 @@ export default class OWTV86Browser extends LitElement
 
     const initOpts =  {
       screen_container: emuDiv,
-      memory_size: 192 * 1024 * 1024,
+      memory_size: 512 * 1024 * 1024,
       vga_memory_size: 16 * 1024 * 1024,
       bios: {
-          url: this.opts.imagePath + "seabios.bin",
+          url:  this.opts.biosPath + "seabios.bin",
       },
       vga_bios: {
-          url: this.opts.imagePath + "vgabios.bin",
+          url: this.opts.biosPath + "vgabios.bin",
       },
       hda,
+      preserve_mac_from_state_image: true,
+      acpi: !!this.opts.acpi,
       autostart: true,
+      wasm_path: "dist/v86.wasm",
       network_adapter: (bus) => new V86Network(bus, this.url, this.ts, this.opts.clientIP, this.opts.clientMAC),
-      network_mac: DEFAULT_MAC,
+      mac_address: DEFAULT_MAC,
     };
 
     let stateLoad = false;
@@ -85,12 +90,13 @@ export default class OWTV86Browser extends LitElement
       }
     }
 
-    window.emulator = new V86Starter(initOpts);
+    this.emulator = new V86Starter(initOpts);
+    window.emulator = this.emulator;
 
     if (!stateLoad) {
       setTimeout(() => {
         console.log("Cancel scandisk keycode sent");
-        window.emulator.keyboard_send_scancodes([0x2D]);
+        this.emulator.keyboard_send_scancodes([0x2D]);
       }, 3000);
     }
   }
@@ -146,7 +152,7 @@ export default class OWTV86Browser extends LitElement
   }
 
   captureMouse() {
-    window.emulator.lock_mouse();
+    this.emulator.lock_mouse();
   }
 }
 

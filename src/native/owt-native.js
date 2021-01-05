@@ -2,6 +2,8 @@ import { LitElement, html, css } from 'lit-element';
 
 const ARCHIVE_PREFIX = __ARCHIVE_PREFIX__;
 
+const PROXY_PREFIX = __CORS_PREFIX__;
+
 
 export default class OWTNative extends LitElement
 {
@@ -49,10 +51,10 @@ export default class OWTNative extends LitElement
       msg_type: "addColl",
       name: "live",
       type: "live",
-      file: {"sourceUrl": "proxy:/proxy/"},
+      file: {"sourceUrl": `proxy:${PROXY_PREFIX}`},
       skipExisting: false,
       extraConfig: {
-        "prefix": "/proxy/", 
+        "prefix": PROXY_PREFIX, 
         "isLive": false,
         "archivePrefix": ARCHIVE_PREFIX,
         "injectScripts": this.opts.injectScripts,

@@ -3,6 +3,7 @@ import { LitElement, html, css } from 'lit-element';
 import OWTV86Browser from './v86/owt-v86';
 import OWTBasBrowser from './bas/owt-bas';
 import OWTNative from './native/owt-native';
+//import OWTHalfixBrowser from './halfix/owt-halfix';
 
 // ===========================================================================
 class OldWebToday extends LitElement
@@ -172,7 +173,8 @@ class OldWebToday extends LitElement
 
   renderEmulator() {
     if (!this.launchID) {
-      return html`<div class="err">Please <b>select a browser</b> from the list to start!</div>`;
+      return html`
+      <div class="err">Please <b>select a browser</b> from the list to start! Many browsers support Flash or Java emulation.</div>`;
     }
 
     if (!this.emuOptions.length) {
@@ -185,19 +187,38 @@ class OldWebToday extends LitElement
       return html`<div class="err">Not a valid browser. Please select a browser.</div>`;
     }
 
-    if (this.unsupported && (emu.emu === "v86" || emu.emu === "bas")) {
+    if (this.unsupported && (emu.emu !== "native")) {
       return html`<div class="err">Sorry, OldWeb.today can not run in this emulator in your current browser. Please try the latest version of Chrome or Firefox to use this emulator.
       <br/>The Ruffle emulator may still work.</div>`;
     }
 
     if (emu.emu === "v86") {
-      return html`<owt-v86-browser @dl-progress="${this.onDownload}" .opts="${emu.opts}" url="${this.replayUrl}" ts="${this.replayTs}"></owt-v86-browser>`;
+      return html`
+      <owt-v86-browser
+      @dl-progress="${this.onDownload}"
+      .opts="${emu.opts}" url="${this.replayUrl}" ts="${this.replayTs}">
+      </owt-v86-browser>`;
+
     } else if (emu.emu === "bas") {
-      return html`<owt-bas-browser @dl-progress="${this.onDownload}" .opts="${emu.opts}" url="${this.replayUrl}" ts="${this.replayTs}"></owt-bas-browser>`;
+      return html`
+      <owt-bas-browser @dl-progress="${this.onDownload}"
+      .opts="${emu.opts}" url="${this.replayUrl}" ts="${this.replayTs}">
+      </owt-bas-browser>`;
+
+    } else if (emu.emu === "halfix") {
+      return html`
+      <owt-halfix-browser @dl-progress="${this.onDownload}"
+      .opts="${emu.opts}" url="${this.replayUrl}" ts="${this.replayTs}">
+      </owt-halfix-browser>`;
+
     } else if (emu.emu === "native") {
-      return html`<owt-native @dl-progress="${this.onDownload}"
+      return html`
+      <owt-native @dl-progress="${this.onDownload}"
       @load-started="${this.onStartLoading}"
-      @load-finished="${this.onClearUpdateNeeded}" .opts="${emu.opts}" url="${this.replayUrl}" ts="${this.replayTs}"></owt-native>`;
+      @load-finished="${this.onClearUpdateNeeded}"
+      .opts="${emu.opts}" url="${this.replayUrl}" ts="${this.replayTs}">
+      </owt-native>`;
+
     } else {
       return html`<div class="err">Unknown emulator type: ${emu.emu}</div>`;
     }
@@ -213,7 +234,12 @@ class OldWebToday extends LitElement
     <img width="24" height="24" src="./assets/icons/${emu.icon}"/>
     `}
 
-    <span style="margin-left: 1.5em; vertical-align: super;">${emu.name}</span>
+    <span class="browser-label">${emu.name}</span>
+
+    ${emu.features ? html`
+    <span class="browser-features">
+    ${emu.features.map((f) => html`<span>${f}</span>`)}
+    </span>` : ``}
     `;
   }
 
@@ -230,11 +256,12 @@ class OldWebToday extends LitElement
               <div class="form-group">
                 <label for="browser" class="form-label space-top">Browser / Emulator:</label>
 
-                <div class="dropdown full-width">
+                <div class="dropdown full-width browser">
                   <a class="btn dropdown-toggle" tabindex="0">
                     <span class="curr-browser">
-                      ${currEmu ? this.renderEmuLabel(currEmu): 'Select a Browser'}</span>
-                    <i class="icon icon-caret" style="vertical-align: baseline"></i>
+                      ${currEmu ? this.renderEmuLabel(currEmu): 'Select a Browser'}
+                      <i class="icon icon-caret" class="caret"></i>
+                    </span>
                   </a>
                   <ul id="browser-menu" class="menu">
                     ${this.emuOptions.map((emu, i) => html`
@@ -386,6 +413,8 @@ class OldWebToday extends LitElement
       return;
     }
 
+    window.emulator.stop();
+
     window.emulator.save_state((err, buff) => {
       if (err) {
         console.log(err);
@@ -395,13 +424,15 @@ class OldWebToday extends LitElement
       const blob = new Blob([buff]);
 
       const a = document.createElement("a");
-      a.download = "state.bin";
+      a.download = "savestate.bin";
       a.href = window.URL.createObjectURL(blob);
       a.dataset["downloadurl"] = ["application/octet-stream", a.download, a.href].join(":");
 
       a.click();
 
       window.URL.revokeObjectURL(a.href);
+
+      window.emulator.run();
     });
   }
 }
@@ -409,4 +440,5 @@ class OldWebToday extends LitElement
 customElements.define("oldweb-today", OldWebToday);
 customElements.define("owt-v86-browser", OWTV86Browser);
 customElements.define("owt-bas-browser", OWTBasBrowser);
+//customElements.define("owt-halfix-browser", OWTHalfixBrowser);
 customElements.define("owt-native", OWTNative);

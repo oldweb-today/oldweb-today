@@ -10,20 +10,30 @@ const INDEX_HTML = require("fs").readFileSync("./site/index.html", {encoding: "u
 // base path for <path>/assets and <path>/dist when running from cloudflare worker
 const CDN_PREFIX = "https://dh-preserve.sfo2.digitaloceanspaces.com/owt";
 
-// base path for images (used in config.json)
-const IMAGE_PREFIX = CDN_PREFIX + "/images";
+// set to ".gz" if gzipped state and images are being used
+const GZ = ".gz";
+//const GZ = "";
 
 // fallback CORS proxy for running as static site
 // const CORS_PREFIX = "http://cors-anywhere.herokuapp.com/";
 
 // path to CORS proxy
-const CORS_PREFIX = "/proxy/";
+//const CORS_PREFIX = "/proxy/";
+const CORS_PREFIX = "https://oldweb.today/proxy/";
+
+
+// base path for images (used in config.json)
+//const IMAGE_PREFIX = CDN_PREFIX + "/images";
+//const IMAGE_PREFIX = "/images";
+
+const IMAGE_PREFIX = "https://oldweb.today/images";
+
 
 
 // origins allowed to connect to cors proxy
 // set to '[]' to allow all
 // only used if connecting to cors proxy from a different deployment
-const CORS_ALLOWED_ORIGINS = ["https://oldweb.today", "https://js.oldweb.today"]; 
+const CORS_ALLOWED_ORIGINS = ["https://oldweb.today", "https://js.oldweb.today", "http://localhost:10001"]; 
 
 
 // path to web archive / wayback machine
@@ -77,7 +87,7 @@ export default [{
         targets: [
           // Shared Config
           { src: 'src/config.json', dest: 'site/assets/',
-            transform: (contents) => contents.toString().replace(/\$IMAGE_PREFIX/g, IMAGE_PREFIX)
+            transform: (contents) => contents.toString().replace(/\$IMAGE_PREFIX/g, IMAGE_PREFIX).replace(/\$GZ/g, GZ)
           },
 
           // Basilisk
@@ -86,6 +96,7 @@ export default [{
 
           // V86
           { src: 'src/v86/libv86.js', dest: 'site/dist/' },
+          { src: 'src/v86/v86.wasm', dest: 'site/dist/' },
 
           // Native SW
           { src: 'src/native/sw.js', dest: 'site/'},
@@ -95,6 +106,7 @@ export default [{
         ]
       }),
       replace({
+        __CORS_PREFIX__: JSON.stringify(CORS_PREFIX),
         __ARCHIVE_PREFIX__: JSON.stringify(ARCHIVE_PREFIX)
       }),
       process.env.SERVE === "1" && 

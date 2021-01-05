@@ -223,7 +223,7 @@ function startEmulator(parentConfig) {
 
   const rewriteFiles = {};
 
-  rewriteFiles[opts.imagePath + 'prefs'] = (data) => {
+  rewriteFiles[opts.biosPath + 'prefs'] = (data) => {
     data = new TextDecoder().decode(data).replace("$DISK", pathGetFilename(opts.imageUrl));
     return new TextEncoder().encode(data);
   }
@@ -234,8 +234,8 @@ function startEmulator(parentConfig) {
     autoloadFiles: [
       opts.imageUrl,
       opts.emuBrowserId, 
-      opts.imagePath + 'performa.rom',
-      opts.imagePath + 'prefs'
+      opts.biosPath + 'performa.rom',
+      opts.biosPath + 'prefs'
     ],
 
     arguments: ['--config', 'prefs'],
@@ -418,7 +418,8 @@ function startEmulator(parentConfig) {
       xhr.responseType = 'arraybuffer';
       if (url.endsWith(".img") || url.endsWith(".img.gz")) {
         xhr.onprogress = function(event) {
-          const data = {count: event.loaded, total: event.total};
+          const total = event.total || Number(xhr.getResponseHeader("x-amz-meta-full-content-length"));
+          const data = {count: event.loaded, total};
           self.postMessage(data);
         }
       }

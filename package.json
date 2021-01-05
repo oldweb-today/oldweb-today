@@ -6,7 +6,7 @@
   "sideEffects": [
     "./src/main.js"
   ],
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@rollup/plugin-node-resolve": "^10.0.0",

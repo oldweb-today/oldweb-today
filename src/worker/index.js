@@ -50,11 +50,11 @@ export async function handleRequest(request) {
   }
 
   if (requestPath.startsWith("/dist/") || requestPath.startsWith("/assets/") || requestPath.startsWith("/images/")) {
-    return handleFetchCDN(STATIC_PREFIX + requestPath);
+    return handleFetchCDN(STATIC_PREFIX + requestPath, request);
   }
 
   if (requestPath === "/sw.js") {
-    return handleFetchCDN(STATIC_PREFIX + "/dist" + requestPath);
+    return handleFetchCDN(STATIC_PREFIX + "/dist" + requestPath, request);
   }
 
   if (requestPath === "/" || requestPath === "/index.html") {
@@ -65,18 +65,33 @@ export async function handleRequest(request) {
 }
 
 // ===========================================================================
-async function handleFetchCDN(url) {
-  const resp = await fetch(url, {cf: cfOpts});
+async function handleFetchCDN(url, request) {
+  const resp = await fetch(url, {cf: cfOpts, headers: request.headers});
   const headers = new Headers(resp.headers);
+  const opts = {status: resp.status, statusText: resp.statusText, headers};
+
   headers.set("Cross-Origin-Opener-Policy", "same-origin");
   headers.set("Cross-Origin-Embedder-Policy", "require-corp");
+
   if (url.endsWith(".js")) {
     headers.set("Content-Type", "application/javascript");
   }
   if (url.endsWith(".css")) {
     headers.set("Content-Type", "text/css");
   }
-  return new Response(resp.body, {headers});
+  if (url.endsWith(".wasm")) {
+    headers.set("Content-Type", "application/wasm");
+  }
+
+
+  if (url.endsWith(".gz")) {
+    headers.set("content-encoding", "gzip");
+    headers.delete("vary");
+    opts.encodeBody = "manual";
+  }
+  addCORSHeaders(headers, request, resp);
+
+  return new Response(resp.body, opts);
 }
 
 // ===========================================================================
@@ -122,8 +137,6 @@ export async function handleLiveWebProxy(proxyUrl, request) {
   const resp = await fetchWithRedirCheck(proxyUrl, request.method, proxyHeaders, body);
 
   const headers = new Headers(resp.headers);
-  headers.set("Access-Control-Allow-Origin", request.headers.get("Origin"));
-  headers.set("Access-Control-Allow-Credentials", "true");
 
   const set_cookie = resp.headers.get("set-cookie");
   if (set_cookie) {
@@ -144,7 +157,32 @@ export async function handleLiveWebProxy(proxyUrl, request) {
     status = resp.status;
   }
 
+  addCORSHeaders(headers, request, resp);
+
+  let respBody;
+
+  if (status >= 400 && !resp.headers.get("memento-datetime")) {
+    respBody = `Sorry, this page was not found or could not be loaded: (Error ${status})`;
+  } else {
+    respBody = resp.body;
+  }
+
+  return new Response(respBody, {headers, status, statusText});
+}
+
+// ===========================================================================
+function addCORSHeaders(headers, request, resp) {
+  const origin = request.headers.get("Origin");
+
+  // no need for CORS headers!
+  if (!origin) {
+    return;
+  }
+
   const allowHeaders = ["x-redirect-status", "x-redirect-statusText", "X-Proxy-Set-Cookie", "x-orig-location"];
+
+  headers.set("Access-Control-Allow-Origin", origin);
+  headers.set("Access-Control-Allow-Credentials", "true");
 
   for (const header of resp.headers.keys()) {
     if (["transfer-encoding", "content-encoding"].includes(header)) {
@@ -158,17 +196,8 @@ export async function handleLiveWebProxy(proxyUrl, request) {
   //headers.delete("transfer-encoding");
 
   headers.set("Access-Control-Expose-Headers", allowHeaders.join(","));
-
-  let respBody;
-
-  if (status >= 400 && !resp.headers.get("memento-datetime")) {
-    respBody = `Sorry, this page was not found or could not be loaded: (Error ${status})`;
-  } else {
-    respBody = resp.body;
-  }
-
-  return new Response(respBody, {headers, status, statusText});
 }
+
 
 // ===========================================================================
 function handleOptions(request) {

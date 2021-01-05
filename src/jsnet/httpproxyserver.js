@@ -33,6 +33,9 @@ function FindProxyForURL(url, host)
   }
 
   useKeepAlive(req) {
+    //disabled for now
+    return false;
+
     if (!req.match(/Proxy-Connection\:\skeep-alive/i)) {
       return false;
     }
