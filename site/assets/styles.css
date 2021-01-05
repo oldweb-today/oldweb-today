@@ -38,11 +38,12 @@ a:visited {
 .curr-browser .browser-label {
   min-width: auto;
   width: auto;
-  margin-right: 1.0em;
+  margin-left: 0.5em;
 }
 
 .curr-browser .browser-features {
   flex-direction: row;
+  margin-left: 1.0em;
 }
 
 .curr-browser .browser-features span:not(:last-child):after {
@@ -128,6 +129,7 @@ a:visited {
 
   .btn.dropdown-toggle {
     display: inline-block;
+    max-width: 100%;
   }
 
   .curr-browser {
