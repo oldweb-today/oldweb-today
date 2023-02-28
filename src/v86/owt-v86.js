@@ -166,7 +166,7 @@ class V86Network
 
     const recvCallback = usePoll ? null : (data) => this.recv(data);
     
-    this.jsnet = new JSNetClient({
+    this.jsnet = new JSNet.JSNetClient({
       jsnetUrl: "dist/jsnet.js",
       replayTs, replayUrl, clientIP, clientMAC,
       recvCallback,

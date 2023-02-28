@@ -9,24 +9,27 @@
   "version": "1.1.0",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@rollup/plugin-node-resolve": "^10.0.0",
+    "@webrecorder/wabac": "^2.15.3",
     "lit-element": "^2.4.0",
-    "sab-ring-buffer": "https://github.com/PaulKinlan/sab-ring-buffer",
+    "sab-ring-buffer": "github:PaulKinlan/sab-ring-buffer",
     "spectre.css": "^0.5.9",
     "web-streams-polyfill": "^3.0.1"
   },
   "scripts": {
-    "build": "rollup -c rollup.config.prod.js",
-    "build-dev": "NODE_ENV=development rollup -c  rollup.config.dev.js",
-    "start-dev": "NODE_ENV=development rollup -c && NODE_ENV=development SERVE=1 rollup -c rollup.config.dev.js",
-    "publish": "rollup -c; cd worker-site; wrangler publish"
+    "build": "webpack --mode production",
+    "build-dev": "webpack --mode development",
+    "build-docs": "bundle install; bundle exec jekyll build",
+    "start-dev": "webpack serve --mode development"
   },
   "devDependencies": {
-    "@rollup/plugin-replace": "^2.3.4",
+    "copy-webpack-plugin": "^11.0.0",
+    "filemanager-webpack-plugin": "^8.0.0",
     "node-fetch": "^2.6.1",
-    "rollup": "^2.34.0",
-    "rollup-plugin-copy": "^3.3.0",
-    "rollup-plugin-livereload": "^2.0.0",
-    "rollup-plugin-serve": "^1.1.0"
+    "path-browserify": "^1.0.1",
+    "raw-loader": "^4.0.2",
+    "terser-webpack-plugin": "^5.3.6",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
   }
 }
