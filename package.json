@@ -6,7 +6,7 @@
   "sideEffects": [
     "./src/main.js"
   ],
-  "version": "1.0.1",
+  "version": "1.1.0",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@rollup/plugin-node-resolve": "^10.0.0",
@@ -16,9 +16,9 @@
     "web-streams-polyfill": "^3.0.1"
   },
   "scripts": {
-    "build": "rollup -c",
-    "build-dev": "NODE_ENV=development rollup -c",
-    "start-dev": "NODE_ENV=development rollup -c && NODE_ENV=development SERVE=1 rollup -c",
+    "build": "rollup -c rollup.config.prod.js",
+    "build-dev": "NODE_ENV=development rollup -c  rollup.config.dev.js",
+    "start-dev": "NODE_ENV=development rollup -c && NODE_ENV=development SERVE=1 rollup -c rollup.config.dev.js",
     "publish": "rollup -c; cd worker-site; wrangler publish"
   },
   "devDependencies": {

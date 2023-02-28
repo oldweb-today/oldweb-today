@@ -37,6 +37,7 @@ export async function handleRequest(request) {
 
   if (requestPath.startsWith("/proxy/")) {
     const pathWithQuery = request.url.split(request.headers.get("host"), 2)[1];
+
     return handleLiveWebProxy(pathWithQuery.slice("/proxy/".length), request);
   }
 
@@ -70,8 +71,8 @@ async function handleFetchCDN(url, request) {
   const headers = new Headers(resp.headers);
   const opts = {status: resp.status, statusText: resp.statusText, headers};
 
-  headers.set("Cross-Origin-Opener-Policy", "same-origin");
-  headers.set("Cross-Origin-Embedder-Policy", "require-corp");
+  //headers.set("Cross-Origin-Opener-Policy", "same-origin");
+  //headers.set("Cross-Origin-Embedder-Policy", "require-corp");
 
   if (url.endsWith(".js")) {
     headers.set("Content-Type", "application/javascript");
@@ -83,12 +84,12 @@ async function handleFetchCDN(url, request) {
     headers.set("Content-Type", "application/wasm");
   }
 
-
   if (url.endsWith(".gz")) {
     headers.set("content-encoding", "gzip");
     headers.delete("vary");
     opts.encodeBody = "manual";
   }
+
   addCORSHeaders(headers, request, resp);
 
   return new Response(resp.body, opts);
@@ -98,8 +99,8 @@ async function handleFetchCDN(url, request) {
 function handleIndex() {
   return new Response(INDEX_HTML, {headers: {
     "Content-Type": "text/html",
-    "Cross-Origin-Opener-Policy": "same-origin",
-    "Cross-Origin-Embedder-Policy": "require-corp"
+    //"Cross-Origin-Opener-Policy": "same-origin",
+    //"Cross-Origin-Embedder-Policy": "require-corp"
   }});
 }
 

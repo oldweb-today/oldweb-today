@@ -5,6 +5,11 @@ import OWTBasBrowser from './bas/owt-bas';
 import OWTNative from './native/owt-native';
 //import OWTHalfixBrowser from './halfix/owt-halfix';
 
+const ARCHIVE_PREFIX = __ARCHIVE_PREFIX__;
+
+const PROXY_PREFIX = __CORS_PREFIX__;
+
+
 // ===========================================================================
 class OldWebToday extends LitElement
 {
@@ -37,6 +42,9 @@ class OldWebToday extends LitElement
     this.dlProgress = 0;
     this.dlProgressTotal = 0;
 
+    this.inited = false;
+    this.initSW();
+
     this.loadConfig();
   }
 
@@ -46,6 +54,49 @@ class OldWebToday extends LitElement
 
     for (const emu of this.emuOptions) {
       this.emuMap[emu.id] = emu;
+    }
+  }
+
+  async initSW() {
+    const scope = "./";
+
+    const hadSW = !!navigator.serviceWorker.controller;
+
+    await navigator.serviceWorker.register("./sw.js", {scope});
+
+    navigator.serviceWorker.addEventListener("message", (event) => {
+      this.inited = true;
+      if (this.unsupported && !hadSW) {
+        window.location.reload();
+      }
+    });
+
+    const baseUrl = new URL(window.location);
+    baseUrl.hash = "";
+
+    const msg = {
+      msg_type: "addColl",
+      name: "live",
+      type: "live",
+      file: {"sourceUrl": `proxy://live`},
+      skipExisting: false,
+      extraConfig: {
+        "prefix": PROXY_PREFIX,
+        "isLive": false,
+        "archivePrefix": ARCHIVE_PREFIX,
+        "injectScripts": ["dist/ruffle.js"],
+        "baseUrl": baseUrl.href,
+        "baseUrlHashReplay": true,
+        "coHeaders": true,
+      },
+    };
+
+    if (!navigator.serviceWorker.controller) {
+      navigator.serviceWorker.addEventListener("controllerchange", (event) => {
+        navigator.serviceWorker.controller.postMessage(msg);
+      });
+    } else {
+      navigator.serviceWorker.controller.postMessage(msg);
     }
   }
 
@@ -63,6 +114,7 @@ class OldWebToday extends LitElement
       unsupported: { type: Boolean },
       dlProgress: { type: Number },
       dlProgressTotal: { type: Number },
+      inited: { type: Boolean },
     }
   }
 
@@ -185,6 +237,10 @@ class OldWebToday extends LitElement
 
     if (!emu) {
       return html`<div class="err">Not a valid browser. Please select a browser.</div>`;
+    }
+
+    if (!this.inited) {
+      return html`<div class="err">Initializing, please wait...</div>`;
     }
 
     if (this.unsupported && (emu.emu !== "native")) {

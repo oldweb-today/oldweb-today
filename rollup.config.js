@@ -8,39 +8,38 @@ import replace from '@rollup/plugin-replace';
 const INDEX_HTML = require("fs").readFileSync("./site/index.html", {encoding: "utf-8"});
 
 // base path for <path>/assets and <path>/dist when running from cloudflare worker
-const CDN_PREFIX = "https://dh-preserve.sfo2.digitaloceanspaces.com/owt";
-
-// set to ".gz" if gzipped state and images are being used
-const GZ = ".gz";
-//const GZ = "";
-
-// fallback CORS proxy for running as static site
-// const CORS_PREFIX = "http://cors-anywhere.herokuapp.com/";
-
-// path to CORS proxy
-//const CORS_PREFIX = "/proxy/";
-const CORS_PREFIX = "https://oldweb.today/proxy/";
-
-
-// base path for images (used in config.json)
-//const IMAGE_PREFIX = CDN_PREFIX + "/images";
-//const IMAGE_PREFIX = "/images";
-
-const IMAGE_PREFIX = "https://oldweb.today/images";
-
-
+// const CDN_PREFIX = "https://dh-preserve.sfo2.digitaloceanspaces.com/owt";
 
 // origins allowed to connect to cors proxy
 // set to '[]' to allow all
 // only used if connecting to cors proxy from a different deployment
-const CORS_ALLOWED_ORIGINS = ["https://oldweb.today", "https://js.oldweb.today", "http://localhost:10001"]; 
+const CORS_ALLOWED_ORIGINS = ["https://oldweb.today", "https://js.oldweb.today", "http://localhost:10002"]; 
 
 
 // path to web archive / wayback machine
 // TODO: support multiple archives
 const ARCHIVE_PREFIX = "https://web.archive.org/web/";
 
-export default [{
+const defaultOpts = {
+  // base path for CDN
+  cdnPrefix: "https://owt.sfo3.cdn.digitaloceanspaces.com",
+
+  // base path for images
+  imagePrefix: "https://owt.sfo3.cdn.digitaloceanspaces.com/images",
+
+  // path to cors proxy
+  corsPrefix: "/proxy/",
+
+  // set to ".gz" if gzipped state and images are being used, otherwise just use empty string
+  useGZ: "",
+};
+
+export default function getConfig(opts = {}) {
+  opts = {...defaultOpts, ...opts};
+
+  const { cdnPrefix, imagePrefix, corsPrefix, useGZ } = opts;
+
+  return [{
     input: 'src/jsnet/jsnet.js',
     output: [
       {
@@ -57,7 +56,7 @@ export default [{
         ]
       }),
       replace({
-        __CORS_PREFIX__: JSON.stringify(CORS_PREFIX),
+        __CORS_PREFIX__: JSON.stringify(corsPrefix),
         __ARCHIVE_PREFIX__: JSON.stringify(ARCHIVE_PREFIX)
       })
     ]
@@ -87,7 +86,7 @@ export default [{
         targets: [
           // Shared Config
           { src: 'src/config.json', dest: 'site/assets/',
-            transform: (contents) => contents.toString().replace(/\$IMAGE_PREFIX/g, IMAGE_PREFIX).replace(/\$GZ/g, GZ)
+            transform: (contents) => contents.toString().replace(/\$IMAGE_PREFIX/g, imagePrefix).replace(/\$GZ/g, useGZ)
           },
 
           // Basilisk
@@ -106,17 +105,18 @@ export default [{
         ]
       }),
       replace({
-        __CORS_PREFIX__: JSON.stringify(CORS_PREFIX),
+        __CORS_PREFIX__: JSON.stringify(corsPrefix),
         __ARCHIVE_PREFIX__: JSON.stringify(ARCHIVE_PREFIX)
       }),
       process.env.SERVE === "1" && 
       serve({
         contentBase: './site/',
-        headers: {
-         'Cross-Origin-Opener-Policy': 'same-origin',
-         'Cross-Origin-Embedder-Policy': 'require-corp'
-        },
+        //headers: {
+        // 'Cross-Origin-Opener-Policy': 'same-origin',
+        // 'Cross-Origin-Embedder-Policy': 'require-corp'
+        //},
         onListening: onServe,
+        port: 10002,
       }),
       //doesn't work with the cross-origin headers...
       //process.env.SERVE === "1" && 
@@ -139,13 +139,14 @@ export default [{
     }],
     plugins: [
       replace({
-        __CDN_PREFIX__: JSON.stringify(CDN_PREFIX),
+        __CDN_PREFIX__: JSON.stringify(cdnPrefix),
         __CORS_ALLOWED_ORIGINS__: JSON.stringify(CORS_ALLOWED_ORIGINS),
         __INDEX_HTML__: JSON.stringify(INDEX_HTML)
       })
     ]
   },
-]
+];
+}
 
 
 
@@ -154,7 +155,7 @@ function onServe(server) {
   const listeners = server.listeners("request");
   server.removeAllListeners("request");
 
-  const { handleLiveWebProxy } = require("./worker-site/localServer");
+  const { handleLiveWebProxy, handleRequest } = require("./worker-site/localServer");
   const fetch = require("node-fetch");
   global.Response = fetch.Response;
   global.Headers = fetch.Headers;
@@ -162,11 +163,19 @@ function onServe(server) {
   global.fetch = fetch;
 
   server.on("request", async (request, response) => {
-    if (request.url.startsWith("/proxy/")) {
+    if (request.url.startsWith("/proxy/") || request.url.startsWith("/images")) {
       try {
-        const url = request.url.slice("/proxy/".length);
-        const req = new Request(`http://localhost:10001/${url}`, {method: "GET"});
-        const resp = await handleLiveWebProxy(url, req);
+        const params = {"method": "GET"};
+        let resp;
+
+        if (request.url.startsWith("/proxy/")) {
+          const url = request.url.slice("/proxy/".length);
+          const req = new Request(`http://localhost:10002/${url}`, params);
+          resp = await handleLiveWebProxy(url, req);
+        } else {
+          const req = new Request(`http://localhost:10002${request.url}`, params);
+          resp = await handleRequest(req);
+        }
         response.writeHead(resp.status, Object.fromEntries(resp.headers.entries()));
         const data = new Uint8Array(await resp.arrayBuffer());
         response.end(data);
@@ -181,10 +190,25 @@ function onServe(server) {
     } else if (request.url.startsWith("/live/")) {
       response.writeHead(404, {"Content-Type": "text/plain"});
       response.end("Not Found");
+
+      console.log(request.url);
+      const url = request.url;
+
+      try {
+        const req = new Request(cdnPrefix + "/" + url, {method: "GET"});
+        const resp = await handleLiveWebProxy(url, req);
+        response.writeHead(resp.status, Object.fromEntries(resp.headers.entries()));
+        const data = new Uint8Array(await resp.arrayBuffer());
+        response.end(data);
+      } catch (err) {
+        console.log(err);
+        response.writeHead(400, {"Content-Type": "text/plain"});
+        response.end("Bad CDN URL: " + request.url);
+      }
     }
 
     return listeners[0](request, response);
   });
 
   console.log("Running Dev Server with Live Web Proxy");
-}
+};

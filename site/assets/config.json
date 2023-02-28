@@ -6,8 +6,8 @@
     "emu": "bas",
     "icon": "mosaic.png",
     "opts": {
-      "biosPath": "https://oldweb.today/images/bas-2/bios/",
-      "imageUrl": "https://oldweb.today/images/bas-2/images/hd-ie-m.img.gz",
+      "biosPath": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/bas-2/bios/",
+      "imageUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/bas-2/images/hd-ie-m.img",
       "emuBrowserId": "br-nm2"
     }
   },
@@ -18,8 +18,8 @@
     "emu": "bas",
     "icon": "mosaic.png",
     "opts": {
-      "biosPath": "https://oldweb.today/images/bas-2/bios/",
-      "imageUrl": "https://oldweb.today/images/bas-2/images/hd-ns.img.gz",
+      "biosPath": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/bas-2/bios/",
+      "imageUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/bas-2/images/hd-ns.img",
       "emuBrowserId": "br-nm3"
     }
   },
@@ -30,8 +30,8 @@
     "emu": "bas",
     "icon": "maclynx.png",
     "opts": {
-      "biosPath": "https://oldweb.today/images/bas-2/bios/",
-      "imageUrl": "https://oldweb.today/images/bas-2/images/hd-ns.img.gz",
+      "biosPath": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/bas-2/bios/",
+      "imageUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/bas-2/images/hd-ns.img",
       "emuBrowserId": "br-ml2"
     }
   },
@@ -43,8 +43,8 @@
     "icon": "ns3.png",
     "features": ["shockwave 3", "java 1.0"],
     "opts": {
-      "biosPath": "https://oldweb.today/images/bas-2/bios/",
-      "imageUrl": "https://oldweb.today/images/bas-2/images/hd-ns.img.gz",
+      "biosPath": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/bas-2/bios/",
+      "imageUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/bas-2/images/hd-ns.img",
       "emuBrowserId": "br-ns3"
     }
   },
@@ -56,8 +56,8 @@
     "icon": "ns4.png",
     "features": ["shockwave 3"],
     "opts": {
-      "biosPath": "https://oldweb.today/images/bas-2/bios/",
-      "imageUrl": "https://oldweb.today/images/bas-2/images/hd-ns.img.gz",
+      "biosPath": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/bas-2/bios/",
+      "imageUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/bas-2/images/hd-ns.img",
       "emuBrowserId": "br-ns4"
     }
   },
@@ -69,8 +69,8 @@
     "icon": "ie4-mac.png",
     "features": ["shockwave 3", "java 1.0"],
     "opts": {
-      "biosPath": "https://oldweb.today/images/bas-2/bios/",
-      "imageUrl": "https://oldweb.today/images/bas-2/images/hd-ie-m.img.gz",
+      "biosPath": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/bas-2/bios/",
+      "imageUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/bas-2/images/hd-ie-m.img",
       "emuBrowserId": "br-ie4"
     }
   },
@@ -80,8 +80,8 @@
     "os": "win98",
     "emu": "v86",
     "opts": {
-      "biosPath": "https://oldweb.today/images/v86-2/bios/",
-      "imageUrl": "https://oldweb.today/images/v86-2/images/ie5-ns4.img",
+      "biosPath": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/bios/",
+      "imageUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/images/ie5-ns4.img",
       "imageSize": 419430400
     },
     "hidden": true
@@ -94,10 +94,10 @@
     "icon": "ns4.png",
     "features": ["flash 8", "java 1.1.5"],
     "opts": {
-      "biosPath": "https://oldweb.today/images/v86-2/bios/",
-      "imageUrl": "https://oldweb.today/images/v86-2/images/ie5-ns4.img",
+      "biosPath": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/bios/",
+      "imageUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/images/ie5-ns4.img",
       "imageSize": 419430400,
-      "stateUrl": "https://oldweb.today/images/v86-2/state/ns4.bin.gz",
+      "stateUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/state/ns4.bin",
       "clientMAC": [0, 34, 21, 16, 17, 18],
       "clientIP": [10, 0, 2, 100]
     }
@@ -108,8 +108,8 @@
     "os": "win98",
     "emu": "v86",
     "opts": {
-      "biosPath": "https://oldweb.today/images/v86-2/bios/",
-      "imageUrl": "https://oldweb.today/images/v86-2/images/ie6.img",
+      "biosPath": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/bios/",
+      "imageUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/images/ie6.img",
       "imageSize": 419430400
     },
     "hidden": true
@@ -122,10 +122,10 @@
     "icon": "ie5.png",
     "features": ["flash 9", "java 5.0"],
     "opts": {
-      "biosPath": "https://oldweb.today/images/v86-2/bios/",
-      "imageUrl": "https://oldweb.today/images/v86-2/images/ie5-ns4.img",
+      "biosPath": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/bios/",
+      "imageUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/images/ie5-ns4.img",
       "imageSize": 419430400,
-      "stateUrl": "https://oldweb.today/images/v86-2/state/ie5.bin.gz",
+      "stateUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/state/ie5.bin",
       "clientMAC": [0, 34, 21, 16, 17, 18],
       "clientIP": [10, 0, 2, 100]
     }
@@ -138,10 +138,10 @@
     "icon": "ie6.png",
     "features": ["flash 9", "java 5.0"],
     "opts": {
-      "biosPath": "https://oldweb.today/images/v86-2/bios/",
-      "imageUrl": "https://oldweb.today/images/v86-2/images/ie6.img",
+      "biosPath": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/bios/",
+      "imageUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/images/ie6.img",
       "imageSize": 419430400,
-      "stateUrl": "https://oldweb.today/images/v86-2/state/ie6.bin.gz",
+      "stateUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/state/ie6.bin",
       "clientMAC": [0, 34, 21, 16, 17, 18],
       "clientIP": [10, 0, 2, 100]
     }
@@ -152,8 +152,8 @@
     "os": "linux",
     "emu": "v86",
     "opts": {
-      "biosPath": "https://oldweb.today/images/v86-2/bios/",
-      "imageUrl": "https://oldweb.today/images/v86-2/images/tclinux.img",
+      "biosPath": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/bios/",
+      "imageUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/images/tclinux.img",
       "imageSize": 209715200,
       "acpi": true
     },
@@ -167,10 +167,10 @@
     "icon": "firefox.png",
     "features": ["flash 32"],
     "opts": {
-      "biosPath": "https://oldweb.today/images/v86-2/bios/",
-      "imageUrl": "https://oldweb.today/images/v86-2/images/tclinux.img",
+      "biosPath": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/bios/",
+      "imageUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/images/tclinux.img",
       "imageSize": 209715200,
-      "stateUrl": "https://oldweb.today/images/v86-2/state/ff10.bin.gz",
+      "stateUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/state/ff10.bin",
       "clientMAC": [0, 34, 21, 16, 17, 18],
       "clientIP": [10, 0, 2, 100],
       "acpi": true
@@ -184,10 +184,10 @@
     "icon": "opera.png",
     "features": ["flash 32"],
     "opts": {
-      "biosPath": "https://oldweb.today/images/v86-2/bios/",
-      "imageUrl": "https://oldweb.today/images/v86-2/images/tclinux.img",
+      "biosPath": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/bios/",
+      "imageUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/images/tclinux.img",
       "imageSize": 209715200,
-      "stateUrl": "https://oldweb.today/images/v86-2/state/op12.bin.gz",
+      "stateUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/v86-2/state/op12.bin",
       "clientMAC": [0, 34, 21, 16, 17, 18],
       "clientIP": [10, 0, 2, 100],
       "acpi": true
