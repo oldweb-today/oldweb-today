@@ -396,9 +396,6 @@ class OldWebToday extends LitElement
               <p>
                 <a href="https://github.com/oldweb-today/oldweb-today" target="_blank">How it Works / View Source</a>
               </p>
-              <p>
-                <a href="http://classic.oldweb.today/" target="_blank">Classic OldWeb.today</a>
-              </p>
               <span>A project by:</span>
               <a href="https://webrecorder.net/" target="_blank">
                 <img class="logo" src="assets/wrLogo.png"/>
