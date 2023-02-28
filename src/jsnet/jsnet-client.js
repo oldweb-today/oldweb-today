@@ -1,7 +1,7 @@
 import RingBuffer from "sab-ring-buffer/ringbuffer.js";
 
 
-export default class JSNetClient
+export class JSNetClient
 {
   constructor({
       replayUrl = "",

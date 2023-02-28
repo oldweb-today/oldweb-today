@@ -84,7 +84,7 @@ class OldWebToday extends LitElement
         "prefix": PROXY_PREFIX,
         "isLive": false,
         "archivePrefix": ARCHIVE_PREFIX,
-        "injectScripts": ["dist/ruffle.js"],
+        //"injectScripts": ["dist/ruffle.js"],
         "baseUrl": baseUrl.href,
         "baseUrlHashReplay": true,
         "coHeaders": true,

@@ -1,8 +1,0 @@
-{
-  "private": false,
-  "name": "owt-site-cors-proxy",
-  "version": "1.0.0",
-  "description": "Site and CORS proxy for oldweb-today.js",
-  "main": "index.js",
-  "author": "Webrecorder Software"
-}

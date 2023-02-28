@@ -206,7 +206,7 @@ function startEmulator(parentConfig) {
 
   importScripts("./jsnet-client.js");
 
-  const jsnet = new JSNetClient(parentConfig.config);
+  const jsnet = new JSNet.JSNetClient(parentConfig.config);
 
   // const hdImgs = {
   //   "br-ns3": "hd-ns.img",
