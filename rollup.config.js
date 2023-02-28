@@ -20,7 +20,25 @@ const CORS_ALLOWED_ORIGINS = ["https://oldweb.today", "https://js.oldweb.today",
 // TODO: support multiple archives
 const ARCHIVE_PREFIX = "https://web.archive.org/web/";
 
-export default function getConfig({imagePrefix, corsPrefix, useGZ, cdnPrefix} = {}) {
+const defaultOpts = {
+  // base path for CDN
+  cdnPrefix: "https://owt.sfo3.cdn.digitaloceanspaces.com",
+
+  // base path for images
+  imagePrefix: "https://owt.sfo3.cdn.digitaloceanspaces.com/images",
+
+  // path to cors proxy
+  corsPrefix: "/proxy/",
+
+  // set to ".gz" if gzipped state and images are being used, otherwise just use empty string
+  useGZ: "",
+};
+
+export default function getConfig(opts = {}) {
+  opts = {...defaultOpts, ...opts};
+
+  const { cdnPrefix, imagePrefix, corsPrefix, useGZ } = opts;
+
   return [{
     input: 'src/jsnet/jsnet.js',
     output: [
