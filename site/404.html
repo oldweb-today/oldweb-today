@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="assets/spectre.min.css">
+    <link rel="stylesheet" href="assets/spectre-exp.min.css">
+    <link rel="stylesheet" href="assets/spectre-icons.min.css">
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="icon" href="assets/favicon.png" type="image/png"/>
+    <script>
+      const oldBrowserMap = {
+        "mosaic": "nm2-mac",
+        "nsmac3": "ns3-mac",
+        "nswin": "ns4-win",
+        "nsmac4": "ns4-mac",
+        "nsmac4.8": "ns4-mac",
+        "nslinux": "ns3-mac",
+        "ie4": "ie4-mac",
+        "ie4mac": "ie4-mac",
+        "ie5.5": "ie5",
+        "ie5mac": "ie5",
+        "safari": "ff10",
+        "firefox": "ff10",
+        "chromium5": "ruffle",
+        "chrome": "ruffle"
+      };
+      const parsed = window.location.pathname.match(/([\w]+)\/(.+)/);
+      if (parsed) {
+        const newUrl = `https://oldweb.today/?browser=${oldBrowserMap[parsed[1]] || "ruffle"}#${parsed[2]}`;
+        window.location.href = newUrl;
+      }
+    </script>
+  </head>
+  <body>
+    <div class="err">Classic oldweb.today is no logner available. Go to<a href="/">https://oldweb.today</a></div>
+  </body>
+</html>
