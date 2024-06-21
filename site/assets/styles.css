@@ -162,6 +162,7 @@ owt-v86-browser, owt-bas-browser {
 owt-bas-browser canvas {
   margin-top: 1em;
   cursor: none;
+  border-radius: 0.5rem;
 }
 
 owt-v86-browser {
