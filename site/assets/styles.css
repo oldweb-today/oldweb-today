@@ -10,9 +10,10 @@ html, body {
 }
 
 .owt-title {
+  font-size: 1.4rem;
   font-family: cursive;
   font-variant-caps: petite-caps;
-  word-break: break-word;
+  word-break: none;
   margin-top: 0.25em;
   margin-bottom: 0px;
   text-align: center;
@@ -182,4 +183,3 @@ owt-native {
   height: 100%;
   border: 0px;
 }
-

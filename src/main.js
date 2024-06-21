@@ -402,7 +402,7 @@ class OldWebToday extends LitElement
               </a>
             </div>
           </div>
-          <div class="column" style="margin-right: 0px">
+          <div class="column" style="display:flex; justify-content: center;">
             ${this.renderEmulator()}
           </div>
         </div>
