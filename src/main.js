@@ -386,7 +386,10 @@ class OldWebToday extends LitElement
             </div>
             <div class="sidebar-centered-text-container" style="margin-top: 2rem;">
               <p>
-                <a href="https://github.com/oldweb-today/oldweb-today" target="_blank">How it Works / View Source</a>
+                <a href="https://github.com/oldweb-today/oldweb-today" target="_blank">OldWeb.Today on GitHub</a>
+                <br>
+                <br>
+                <a href="https://opencollective.com/webrecorder" target="_blank">Support Webrecorder on OpenCollective</a>
               </p>
               <span>A project by:</span>
               <a href="https://webrecorder.net/" target="_blank">
