@@ -392,12 +392,17 @@ class OldWebToday extends LitElement
                 <button @click="${this.onDL}">Save State</button>` : ''}
               </div>
             </div>
-            <div class="sidebar-centered-text-container" style="margin-top: 2rem;">
-              <p>
-                <a href="https://github.com/oldweb-today/oldweb-today" target="_blank">OldWeb.Today on GitHub</a>
-                <br>
-                <br>
-                <a href="https://opencollective.com/webrecorder" target="_blank">Support Webrecorder on OpenCollective ❤️</a>
+            <div class="sidebar-centered-text-container" style="margin-top: 1.2rem">
+              <div style="font-size: 1.1em; padding: 0.5rem; border-radius: 4px; background-color: #eee">
+                <p style="margin-bottom: 0.35rem"><b>❤️  Love OldWeb.today?</b></p>
+                <p style="margin: 0px">
+                Support Webrecorder via:
+                <br/><b><a href="https://opencollective.com/webrecorder" target="_blank">OpenCollective</a></b>
+                / <b><a href="https://github.com/sponsors/webrecorder" target="_blank">GitHub</a></b>
+                </p>
+              </div>
+              <p style="margin-top: 1.0rem">
+                <a href="https://github.com/oldweb-today/oldweb-today" target="_blank">View Source on GitHub</a>
               </p>
               <span>A project by:</span>
               <a href="https://webrecorder.net/" target="_blank">
