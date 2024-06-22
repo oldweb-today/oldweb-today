@@ -389,7 +389,7 @@ class OldWebToday extends LitElement
                 <a href="https://github.com/oldweb-today/oldweb-today" target="_blank">OldWeb.Today on GitHub</a>
                 <br>
                 <br>
-                <a href="https://opencollective.com/webrecorder" target="_blank">Support Webrecorder on OpenCollective</a>
+                <a href="https://opencollective.com/webrecorder" target="_blank">Support Webrecorder on OpenCollective ❤️</a>
               </p>
               <span>A project by:</span>
               <a href="https://webrecorder.net/" target="_blank">
