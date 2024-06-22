@@ -354,14 +354,22 @@ class OldWebToday extends LitElement
                 <input @change="${this.onChangeTs}" class="form-input" type="text" id="dt" ?disabled="${!this.replayTs}"
                   .value="${this.tsToDateMin(this.inputTs)}" placeholder="YYYY-MM-DD hh:mm:ss"></input>
 
+                ${!!this.replayTs ? html`
+                <details>
+                  <summary>Web Archive Sources</summary>
+                  <div>
+                  <label class="form-checkbox">
+                    <input type="checkbox" disabled checked>
+                    <i class="form-icon"></i>Internet Archive
+                    <p style="font-size: 0.75em">More options coming soon...</p>
+                  </label>
+                  </div>
+                </details>` : ``}
+
                 ${this.showTsUpdateMessage ? html`
                   <div class="msg" style="background-color: aliceblue">
                     Date Updated!<br/>Click the <i>Refresh</i> button or load a new page in the emulated browser to start browsing at the new date.
                   </div>` : html``}
-
-                  <div class="sidebar-centered-text-container">
-                    <p>Archived Webpages served from Internet Archive</p>
-                  </div>
 
                 ${this.isRunning ? html`
                   <div style="margin: 1em 0">
