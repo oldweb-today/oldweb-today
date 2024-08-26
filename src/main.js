@@ -283,11 +283,11 @@ class OldWebToday extends LitElement
   renderEmuLabel(emu) {
     return html`
     ${emu.os !== 'native' ? html`
-    <img width="24" height="24" src="./assets/icons/${emu.icon}"/>
-    <img style="margin-left: 1.0em" width="24" height="24" src="./assets/icons/${emu.os}.png"/>` : html`
+    <img width="24" height="24" src="./assets/icons/${emu.icon}" alt=""/>
+    <img style="margin-left: 1.0em" width="24" height="24" src="./assets/icons/${emu.os}.png" alt="${emu.os}"/>` : html`
 
     <span class="icon-fill"></span>
-    <img width="24" height="24" src="./assets/icons/${emu.icon}"/>
+    <img width="24" height="24" src="./assets/icons/${emu.icon}" alt=""/>
     `}
 
     <span class="browser-label">${emu.name}</span>
