@@ -283,11 +283,11 @@ class OldWebToday extends LitElement
   renderEmuLabel(emu) {
     return html`
     ${emu.os !== 'native' ? html`
-    <img width="24" height="24" src="./assets/icons/${emu.icon}"/>
-    <img style="margin-left: 1.0em" width="24" height="24" src="./assets/icons/${emu.os}.png"/>` : html`
+    <img width="24" height="24" src="./assets/icons/${emu.icon}" alt=""/>
+    <img style="margin-left: 1.0em" width="24" height="24" src="./assets/icons/${emu.os}.png" alt="${emu.os}"/>` : html`
 
     <span class="icon-fill"></span>
-    <img width="24" height="24" src="./assets/icons/${emu.icon}"/>
+    <img width="24" height="24" src="./assets/icons/${emu.icon}" alt=""/>
     `}
 
     <span class="browser-label">${emu.name}</span>
@@ -308,7 +308,7 @@ class OldWebToday extends LitElement
           <div class="column controls">
             <div>
               <h2 class="owt-title">OldWeb.Today</h2>
-              <i class="full-width" style="text-align: center; display: block">JS Browser Emulation <img src="./assets/new.gif"/></i>
+              <i class="full-width" style="text-align: center; display: block">JS Browser Emulation <img src="./assets/new.gif"/ alt="new"></i>
               <div class="form-group">
                 <label for="browser" class="form-label space-top">Browser / Emulator:</label>
 
@@ -393,8 +393,16 @@ class OldWebToday extends LitElement
               </div>
             </div>
             <div class="sidebar-centered-text-container" style="margin-top: 1.2rem">
-              <div style="font-size: 1.1em; padding: 0.5rem; border-radius: 4px; background-color: #eee">
-                <p style="margin-bottom: 0.35rem"><b>❤️  Love OldWeb.today?</b></p>
+              <div style="font-size: 1.1em; padding: 0.5rem; border-radius: 4px; background-color: #eee;">
+                  <p style="margin-bottom: 0.35rem"><strong>Want to make your own web archives?</strong></p>
+                  <p style="margin: 0px">
+                  Check out:
+                  <br/>
+                  <a href="https://browsertrix.com" target="_blank"><img class="logo" src="assets/browsertrix-lockup-color.svg" alt="Browsertrix"/></a>
+                  </p>
+              </div>
+              <div style="font-size: 1.1em; padding: 0.5rem; border-radius: 4px; background-color: #eee; margin-top: 0.5rem;">
+                <p style="margin-bottom: 0.35rem"><strong>❤️  Love OldWeb.today?</strong></p>
                 <p style="margin: 0px">
                 Support Webrecorder via:
                 <br/><b><a href="https://opencollective.com/webrecorder" target="_blank">OpenCollective</a></b>
@@ -406,7 +414,7 @@ class OldWebToday extends LitElement
               </p>
               <span>A project by:</span>
               <a href="https://webrecorder.net/" target="_blank">
-                <img class="logo" src="assets/wrLogo.png"/>
+                <img class="logo" src="assets/wrLogo.png" alt="Webrecorder"/>
               </a>
             </div>
           </div>
