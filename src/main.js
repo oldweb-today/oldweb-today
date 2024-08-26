@@ -393,8 +393,16 @@ class OldWebToday extends LitElement
               </div>
             </div>
             <div class="sidebar-centered-text-container" style="margin-top: 1.2rem">
-              <div style="font-size: 1.1em; padding: 0.5rem; border-radius: 4px; background-color: #eee">
-                <p style="margin-bottom: 0.35rem"><b>❤️  Love OldWeb.today?</b></p>
+              <div style="font-size: 1.1em; padding: 0.5rem; border-radius: 4px; background-color: #eee;">
+                  <p style="margin-bottom: 0.35rem"><strong>Want to make your own web archives?</strong></p>
+                  <p style="margin: 0px">
+                  Check out:
+                  <br/>
+                  <a href="https://browsertrix.com" target="_blank"><img class="logo" src="assets/browsertrix-lockup-color.svg" alt="Browsertrix"/></a>
+                  </p>
+              </div>
+              <div style="font-size: 1.1em; padding: 0.5rem; border-radius: 4px; background-color: #eee; margin-top: 0.5rem;">
+                <p style="margin-bottom: 0.35rem"><strong>❤️  Love OldWeb.today?</strong></p>
                 <p style="margin: 0px">
                 Support Webrecorder via:
                 <br/><b><a href="https://opencollective.com/webrecorder" target="_blank">OpenCollective</a></b>
