@@ -308,7 +308,7 @@ class OldWebToday extends LitElement
           <div class="column controls">
             <div>
               <h2 class="owt-title">OldWeb.Today</h2>
-              <i class="full-width" style="text-align: center; display: block">JS Browser Emulation <img src="./assets/new.gif"/></i>
+              <i class="full-width" style="text-align: center; display: block">JS Browser Emulation <img src="./assets/new.gif"/ alt="new"></i>
               <div class="form-group">
                 <label for="browser" class="form-label space-top">Browser / Emulator:</label>
 
@@ -414,7 +414,7 @@ class OldWebToday extends LitElement
               </p>
               <span>A project by:</span>
               <a href="https://webrecorder.net/" target="_blank">
-                <img class="logo" src="assets/wrLogo.png"/>
+                <img class="logo" src="assets/wrLogo.png" alt="Webrecorder"/>
               </a>
             </div>
           </div>
