@@ -398,12 +398,12 @@ class OldWebToday extends LitElement
                   <p style="margin: 0px">
                   Check out:
                   <br/>
-                  <a href="https://browsertrix.com" target="_blank"><img class="logo" src="assets/browsertrix-lockup-color.svg" alt="Browsertrix"/></a>
+                  <a href="https://webrecorder.net/browsertrix" target="_blank"><img class="logo" src="assets/browsertrix-lockup-color.svg" alt="Browsertrix"/></a>
                   </p>
               </div>
               <div style="font-size: 1.1em; padding: 0.5rem; border-radius: 4px; background-color: #eee; margin-top: 0.5rem;">
-                <p style="margin-bottom: 0.35rem"><strong>❤️  Love OldWeb.today?</strong></p>
-                <p style="margin: 0px">
+                <p style="margin-bottom: 0.35rem;"><strong>❤️  Love OldWeb.today?</strong></p>
+                <p style="margin: 0px;">
                 Support Webrecorder via:
                 <br/><b><a href="https://opencollective.com/webrecorder" target="_blank">OpenCollective</a></b>
                 / <b><a href="https://github.com/sponsors/webrecorder" target="_blank">GitHub</a></b>
@@ -412,9 +412,9 @@ class OldWebToday extends LitElement
               <p style="margin-top: 1.0rem">
                 <a href="https://github.com/oldweb-today/oldweb-today" target="_blank">View Source on GitHub</a>
               </p>
-              <span>A project by:</span>
+              <span style="margin-bottom: 0.25rem; display: block;">A project by:</span>
               <a href="https://webrecorder.net/" target="_blank">
-                <img class="logo" src="assets/wrLogo.png" alt="Webrecorder"/>
+                <img class="logo" src="assets/webrecorder-lockup-color.svg" alt="Webrecorder"/>
               </a>
             </div>
           </div>
