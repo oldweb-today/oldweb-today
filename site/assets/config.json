@@ -203,3 +203,15 @@
     "opts": {"injectScripts": ["dist/ruffle.js"]}
   }
 ]
+{
+  "id": "chrome46-linux",
+  "name": "Google Chrome 46",
+  "os": "linux",
+  "emu": "chrome",
+  "icon": "chrome46.png",
+  "opts": {
+    "biosPath": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/bas-2/bios/",
+    "imageUrl": "https://owt.sfo3.cdn.digitaloceanspaces.com/images/bas-2/images/hd-ie-m.img",
+    "emuBrowserId": "br-chrome46"
+  }
+}
